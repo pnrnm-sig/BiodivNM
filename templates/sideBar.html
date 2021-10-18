@@ -1,0 +1,28 @@
+<ul id="sidebar_menu" class="sidebar-nav">
+  <a href="{{url_for('main.index')}}" id="menu-toggle" data-toggle="tooltip" data-original-title="Retour à l'accueil" data-placement="right">
+    <li class="sidebar-brand"><span id="main_icon" class="glyphicon glyphicon-home"></span></li>
+  </a>
+  {% for page_key, page_values in configuration.STATIC_PAGES.items()|sort(attribute='1.order') %}
+    <a href="{{url_for('main.get_staticpages', page=page_key)}}" data-toggle="tooltip"
+      data-original-title="{{page_values.title}}" data-placement="right">
+      <li class="sidebar-brand"><span class="glyphicon {{page_values.picto}}"></span></li>
+    </a>
+  {% endfor %}
+
+  <a href="{{url_for('main.photos')}}" data-toggle="tooltip" data-original-title="Galerie photos" data-placement="right">
+    <li class="sidebar-brand"><span class="glyphicon glyphicon-camera"></span></li>
+  </a>
+
+  <a href="http://www.parc-naturel-normandie-maine.fr" target="_blank" id="menu-toggle" data-toggle="tooltip" data-original-title="Site internet du Parc Normandie-Maine" data-placement="right">
+    <li class="sidebar-brand"><img src="{{url_for('static', filename='custom/images/logo_pnrnm_blanc_50px.png')}}" height="50px"></li>
+  </a>
+
+  <a href="https://www.parc-naturel-normandie-maine.fr/web/newsletter/" target="_blank" data-toggle="tooltip" data-original-title="Newsletter" data-placement="right">
+    <li class="sidebar-brand"><span class="glyphicon glyphicon-send"></li>
+  </a>
+
+  <a href="https://www.parc-naturel-normandie-maine.fr/contact.html" target="_blank" data-toggle="tooltip" data-original-title="Nous écrire" data-placement="right">
+    <li class="sidebar-brand"><span class="glyphicon glyphicon-envelope"></li>
+  </a>
+
+</ul>

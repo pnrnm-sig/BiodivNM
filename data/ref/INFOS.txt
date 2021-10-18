@@ -1,0 +1,8 @@
+[27/07/2021] Romain
+territoire.shp : référentiels géographiques INPN, pnr2021_03, N_ENP_PNR_S_000.shp
+		sélection PNR NM
+communes.shp : admin express cog IGN, 2021, COMMUNE.shp
+		sélection intersection avec territoire
+
+[20/08/2021] Romain
+territoire_limites.shp : fusion des géométries des communes. Utilisés pour sélection des données atlas.

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+   <head>
+        <meta charset="utf-8" />
+        <title>Galerie photo | {{configuration.NOM_APPLICATION}} - {{configuration.STRUCTURE}}</title>
+
+        <!-- Jquery -->
+        <script type=text/javascript src="{{url_for('static', filename='lib/jquery-1.12.4.min.js') }}"></script>
+		    <script type=text/javascript src="{{url_for('static', filename='lib/jquery-ui.min.js') }}"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/jquery-ui.css') }}" />
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"></link>
+        <script type=text/javascript src="{{url_for('static', filename='lib/bootstrap/js/bootstrap.min.js') }}"></script>
+
+        <!-- LightBox -->
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/lightbox2/css/lightbox.css') }}" />
+
+	<!-- custom font Parc -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Amaranth:wght@400;700&family=Dosis:wght@500;700&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
+
+        <!-- CSS Atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/atlas.css') }}" /> <!-- css général atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='custom/custom.css') }}" /> <!-- css overidde - modif des polices et barre du dessus -->
+
+	<!-- favicon / si ne fonctionne pas, mettre fichiers a la racine /atlas-->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='custom/images/favicon/favicon.ico') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='custom/images/favicon/apple-touch-icon.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='custom/images/favicon/favicon-32x32.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='custom/images/favicon/favicon-16x16.png') }}">
+	<link rel="manifest" href="{{ url_for('static', filename='custom/images/favicon/site.webmanifest') }}">
+	<link rel="mask-icon" href="{{ url_for('static', filename='custom/images/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+
+   </head>
+   <body>
+    {% include 'templates/navbar.html' %}
+
+		<div id="sideBar">
+			{% include 'templates/sideBar.html' %}
+		</div>
+		<div class="container-fluid" id="page">
+            <div class="col-sm-12">
+				<div class="row rowMargin">
+					<div class="panel panel-default">
+						<h1 class="title">Galerie photos <span id="group"></span></h1>
+                            <div id="filtresPhotos">
+        						<ul class="floatParent">
+        						    {% for group in groups %}
+        							    <li class="floatLeft">
+                            <img class="INPNgroup" src="{{url_for('static', filename='images/picto_' + group.group | replace(" ", "_") +'.png')}}" alt="{{group.groupAccent}}" data-toggle="tooltip" data-original- title="{{group.groupAccent}}" data-placement="top">
+                          </li>
+        						    {% endfor %}
+
+        						    <li class="floatLeft bottom">
+                            <a id="allGroups" class="btn btn-default" role="button" data-toggle="tooltip" data-original-title="Afficher les photos de tous les groupes" data-placement="top">Tous les groupes</a>
+                        </li>
+                        <li class="floatLeft bottom">
+                            <span id="orderPhotos" class="sortedButton">
+                                <span id="sort" class="glyphicon glyphicon-sort" data-toggle="tooltip" data-original-title="Trier les photos par nombre d'observations" data-placement="top"></span>
+                            </span>
+                        </li>
+        		<li class="floatLeft bottom">
+                          <input type="text" class="form-control" id="searchPhotos" placeholder="Rechercher" value="">                        
+                        </li>
+                    </ul>
+              </div>
+              <h3 id="nbPhotos"></h4>
+					</div>
+
+				</div>
+			</div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-12 panel panel-default" id="insertPhotos"></div>
+      </div>
+
+    </div>
+
+        {% if configuration.AFFICHAGE_FOOTER %}
+            {% include 'static/custom/templates/footer.html' %}
+        {% endif %}
+
+        <script type="text/javascript">
+            var configuration = {{configuration|tojson}};
+        </script>
+
+
+        <div id="hide">
+            <script src="{{url_for('static', filename='lib/lightbox2/js/lightbox.js') }}"></script>
+            <script src="{{url_for('static', filename='galleryPhoto.js') }}"></script>
+            <script src="{{url_for('static', filename='main.js') }}"></script>
+        </div>
+
+   </body>
+
+</html>
