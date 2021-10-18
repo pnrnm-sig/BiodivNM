@@ -25,6 +25,7 @@ Sinon, principalement surcharge des styles ou ajout de modèle personnalisé dan
 
 # Modifications des photos 
 * ajouts INPN, Wikipedias etc.
+
 Voir https://github.com/PnX-SI/TaxHub/tree/master/data/scripts
 Scripts adaptés, cf. ...
 
@@ -40,5 +41,6 @@ Scripts adaptés, cf. ...
 * Ajout cartes GBIF
 
 * Ajout des milieux
+
 A partir des habitats associés aux taxons
 
