@@ -100,21 +100,26 @@ Voir modèle de pages :
 [/static/images/](/static/images/)
 
 # Modifications des photos 
-## Ajouts INPN, Wikipedias etc.
+## Ajouts photos INPN, Wikipedias etc.
 
 Voir https://github.com/PnX-SI/TaxHub/tree/master/data/scripts
 Scripts adaptés, cf. ...
 
-## Ajout source et licence
+## Ajout source et licence des photos
 
 ## Ajout descriptions INPN
+Voir [/data/scripts/Taxhub/descriptions](/data/scripts/Taxhub/descriptions])
 
+Import des descriptions depuis l'API de l'INPN, sur le Taxhub relié à l'Atlas
 # Fiche espèce
 ## Ajout espèces protégées / espèces patrimoniales
 
 ## Ajout cartes INPN
 
 ## Ajout cartes GBIF
+Voir [/data/scripts/gbif](/data/scripts/gbif])
+
+Export des cartes en leaflet avec R, en format html. Possible de le faire directement en javascript depuis FicheEspece.html : évite la nécessité d'une mise à jour mais risque de ralentir le chargement (?). 
 
 ## Ajout des milieux
 
