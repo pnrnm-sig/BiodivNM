@@ -17,7 +17,7 @@ Modification de certains fichiers CSS et directement dans les modèles de pages 
 Sinon, principalement surcharge des styles ou ajout de modèle personnalisé dans /static/custom/custom.css
 
 # Page accueil
-* Rotation de la photo d'accueil : tous les mois, en fonction de 12 photos dans /static/custom/images/accueil-intro
+## Rotation de la photo d'accueil : tous les mois, en fonction de 12 photos dans /static/custom/images/accueil-intro
 ```
 sudo crontab -e
 
@@ -39,7 +39,7 @@ sudo crontab -e
 10 2 * * * supervisorctl restart atlas
 ```
 
-* Modification du fonctionnement "à voir en ce moment"
+## Modification du fonctionnement "à voir en ce moment"
 
 Sélection aléatoire de 12 taxons parmi les 36 les plus observés dans les 15 jours avant/après la date du jour, 
 toutes années confondues. Sélection uniquement des taxons avec une photo.
@@ -77,12 +77,12 @@ crontab -e
 */15 * * * * psql -d geonatureatlas -c "REFRESH MATERIALIZED VIEW CONCURRENTLY atlas.vm_taxons_plus_observes;"
 ```
 
-* Modification du fonctionnement limites pour les données et les cartes du territoire
+## Modification du fonctionnement limites pour les données et les cartes du territoire
 
 Trois types de limites paramétrées dans la configuration de l'atlas : 
-** les limites du PNR pour l'affichage sur les cartes
-** la zone considérée pour récuperer les données de la base GeoNature
-** les villes portes pour l'affichage sur les cartes
+* les limites du PNR pour l'affichage sur les cartes
+* la zone considérée pour récuperer les données de la base GeoNature
+* les villes portes pour l'affichage sur les cartes
 
 ![limites_territoires](/docs/images/limites_territoire.png)
 
@@ -98,23 +98,23 @@ Cf. /data/ref ; /atlas/configuration/settings.ini ; /install_db.sh
 /static/images/
 
 # Modifications des photos 
-* Ajouts INPN, Wikipedias etc.
+## Ajouts INPN, Wikipedias etc.
 
 Voir https://github.com/PnX-SI/TaxHub/tree/master/data/scripts
 Scripts adaptés, cf. ...
 
-* Ajout source et licence
+## Ajout source et licence
 
-* Ajout descriptions INPN
+## Ajout descriptions INPN
 
 # Fiche espèce
-* Ajout espèces protégées / espèces patrimoniales
+## Ajout espèces protégées / espèces patrimoniales
 
-* Ajout cartes INPN
+## Ajout cartes INPN
 
-* Ajout cartes GBIF
+## Ajout cartes GBIF
 
-* Ajout des milieux
+## Ajout des milieux
 
 À partir des habitats associés aux taxons
 
