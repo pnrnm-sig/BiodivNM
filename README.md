@@ -84,7 +84,7 @@ Trois types de limites paramétrées dans la configuration de l'atlas :
 ** la zone considérée pour récuperer les données de la base GeoNature
 ** les villes portes pour l'affichage sur les cartes
 
-/docs/images/limites_territoire.png
+![limites_territoires](/docs/images/limites_territoire.png)
 
 Cf. /data/ref ; /atlas/configuration/settings.ini ; /install_db.sh
 
@@ -93,9 +93,9 @@ Cf. /data/ref ; /atlas/configuration/settings.ini ; /install_db.sh
 /static/custom/templates/donnees.html
 /static/custom/templates/partenaires.html
 
-# Ajouts et modification des pictos
+# Ajouts et/ou modification des pictos
 
-
+/static/images/
 
 # Modifications des photos 
 * Ajouts INPN, Wikipedias etc.
