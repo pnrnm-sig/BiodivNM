@@ -3,21 +3,22 @@ Biodiv' Normandie-Maine : https://biodiversite.parc-naturel-normandie-maine.fr/
 
 Installation de GeoNature-atlas par le PNR Normandie-Maine.
 
-Présentation de Biodiv' Normandie-Maine, cf. /docs/BiodivNM_Presentation_202111.pdf
+Présentation de Biodiv' Normandie-Maine, voir [/docs/BiodivNM_Presentation_202111.pdf](/docs/BiodivNM_Presentation_202111.pdf)
 
 Atlas ayant servi d'inspiration :
 * https://biodiv-paysdelaloire.fr/
 * https://biodiv.pnr-seine-normande.com/atlas
 * https://clicnat.fr/
 
-Voir /README.rst la présentation par le PN des Écrins
+Voir [/README.rst](/README.rst) la présentation par le PN des Écrins
 
 # Personnalisation du style
 Modification de certains fichiers CSS et directement dans les modèles de pages html. 
-Sinon, principalement surcharge des styles ou ajout de modèle personnalisé dans /static/custom/custom.css
+Sinon, principalement surcharge des styles ou ajout de modèle personnalisé dans [/static/custom/custom.css](/static/custom/custom.css)
 
 # Page accueil
-## Rotation de la photo d'accueil : tous les mois, en fonction de 12 photos dans /static/custom/images/accueil-intro
+## Rotation de la photo d'accueil
+Tous les mois, en fonction de 12 photos dans [/static/custom/images/accueil-intro](/static/custom/images/accueil-intro)
 ```
 sudo crontab -e
 
@@ -44,7 +45,7 @@ sudo crontab -e
 Sélection aléatoire de 12 taxons parmi les 36 les plus observés dans les 15 jours avant/après la date du jour, 
 toutes années confondues. Sélection uniquement des taxons avec une photo.
 
-Modification de la création de vm_taxons_plus_observes, cf. /data/atlas.sql
+Modification de la création de vm_taxons_plus_observes, voir [/static/custom/images/accueil-intro](/static/custom/images/accueil-intro)
 ```
 CREATE MATERIALIZED VIEW atlas.vm_taxons_plus_observes AS
 SELECT * 
@@ -86,16 +87,17 @@ Trois types de limites paramétrées dans la configuration de l'atlas :
 
 ![limites_territoires](/docs/images/limites_territoire.png)
 
-Cf. /data/ref ; /atlas/configuration/settings.ini ; /install_db.sh
+Voir modifications dans : [/data/ref](/data/ref) ; [/atlas/configuration/settings.ini](/atlas/configuration/settings.ini) ; [/install_db.sh](/install_db.sh)
 
 # Ajout page "données" et page "partenaires"
 
-/static/custom/templates/donnees.html
-/static/custom/templates/partenaires.html
+Voir modèle de pages :
+[/static/custom/templates/donnees.html](/static/custom/templates/donnees.html)
+[/static/custom/templates/partenaires.html](/static/custom/templates/partenaires.html)
 
 # Ajouts et/ou modification des pictos
 
-/static/images/
+[/static/images/](/static/images/)
 
 # Modifications des photos 
 ## Ajouts INPN, Wikipedias etc.
