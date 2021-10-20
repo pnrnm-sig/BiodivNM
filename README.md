@@ -1,7 +1,7 @@
 # GeoNature-atlas-BiodivNM
 Biodiv' Normandie-Maine : https://biodiversite.parc-naturel-normandie-maine.fr/
 
-Installation de GeoNature-atlas par le [https://www.parc-naturel-normandie-maine.fr/](PNR Normandie-Maine).
+Installation de GeoNature-atlas par le [PNR Normandie-Maine](https://www.parc-naturel-normandie-maine.fr/).
 
 Présentation de Biodiv' Normandie-Maine, voir [/docs/BiodivNM_Presentation_202111.pdf](/docs/BiodivNM_Presentation_202111.pdf)
 
