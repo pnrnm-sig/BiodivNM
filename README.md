@@ -1,7 +1,7 @@
 # GeoNature-atlas-BiodivNM
 Biodiv' Normandie-Maine : https://biodiversite.parc-naturel-normandie-maine.fr/
 
-Installation de GeoNature-atlas par le PNR Normandie-Maine.
+Installation de GeoNature-atlas par le [https://www.parc-naturel-normandie-maine.fr/](PNR Normandie-Maine).
 
 Présentation de Biodiv' Normandie-Maine, voir [/docs/BiodivNM_Presentation_202111.pdf](/docs/BiodivNM_Presentation_202111.pdf)
 
@@ -41,7 +41,6 @@ sudo crontab -e
 ```
 
 ## Modification du fonctionnement "à voir en ce moment"
-
 Sélection aléatoire de 12 taxons parmi les 36 les plus observés dans les 15 jours avant/après la date du jour, 
 toutes années confondues. Sélection uniquement des taxons avec une photo.
 
@@ -79,7 +78,6 @@ crontab -e
 ```
 
 ## Modification du fonctionnement limites pour les données et les cartes du territoire
-
 Trois types de limites paramétrées dans la configuration de l'atlas : 
 * les limites du PNR pour l'affichage sur les cartes
 * la zone considérée pour récuperer les données de la base GeoNature
@@ -96,32 +94,79 @@ Voir modèle de pages :
 [/static/custom/templates/partenaires.html](/static/custom/templates/partenaires.html)
 
 # Ajouts et/ou modification des pictos
+Voir dans [/static/images/](/static/images/)
 
-[/static/images/](/static/images/)
+# Modifications des attributs des taxons / contenus fiches espèces
 
-# Modifications des photos 
-## Ajouts photos INPN, Wikipedias etc.
-
+## Ajouts photos INPN, Wikipedias, etc.
 Voir https://github.com/PnX-SI/TaxHub/tree/master/data/scripts
-Scripts adaptés, cf. ...
+Scripts adaptés, voir [/data/scripts/Taxhub](/data/scripts/Taxhub)
+
+Import des photos de l'INPN avec un script, + ajouts de photos importées manuellement depuis Wikimédia et GBIF
 
 ## Ajout source et licence des photos
+Modification sur l'installation de Taxhub du champ 'Auteur' en 'Auteur # licence # source' dans le modèle de page, 
++ tâche cron pour mettre à jour dans la table taxonomie.t_medias les attributs correspondants. Détails ci-dessous.
+
+Modification de taxhub/static/app/bib_nom/edit/media/createBibnomsMedias-template.html en remplaçant
+`id="lbl-inputAuteur">Auteur </label>`
+par
+`id="lbl-inputAuteur">Auteur # Licence # Source </label>`
+
+et en créant un script sql qui splitte l’attribut 'Auteur'
+```
+update taxonomie.t_medias
+set auteur = selection.auteurbis,
+	licence = selection.licencebis,
+	source = selection.sourcebis
+from (
+	select *
+	from (
+		select t_medias.id_media as id_mediabis,
+			split_part(t_medias.auteur, ' # ', 1) AS auteurbis
+		     , split_part(t_medias.auteur, ' # ', 2) AS licencebis
+		     , split_part(t_medias.auteur, ' # ', 3) AS sourcebis
+		from taxonomie.t_medias
+		where (t_medias.id_type = 1 or t_medias.id_type = 2)
+	) as selection
+	) as selection
+where selection.licencebis <> '' and selection.sourcebis <> '' and selection.id_mediabis = id_media 
+;
+```
+plus une tâche cron
+`sudo su postgres`
+`crontab -e`
+`0 4 * * * psql -d geonature2db -f /home/pnr/taxhub/data/scripts/pnrnm/update_auteur_t_medias.sql`
 
 ## Ajout descriptions INPN
 Voir [/data/scripts/Taxhub/descriptions](/data/scripts/Taxhub/descriptions])
 
-Import des descriptions depuis l'API de l'INPN, sur le Taxhub relié à l'Atlas
-# Fiche espèce
+Import des descriptions depuis l'API de l'INPN, sur le Taxhub relié à l'Atlas.
+
 ## Ajout espèces protégées / espèces patrimoniales
+Voir [/data/scripts/Taxhub/protect_patrimo](/data/scripts/Taxhub/protect_patrimo])
 
-## Ajout cartes INPN
+Récupération du statut espèce protégée et espèce patrimoniale avec l'API Taxref. Voir scripts pour définitions. + utilisation de la liste des espèces pour Natura2000 [https://inpn.mnhn.fr/site/natura2000/listeEspeces](https://inpn.mnhn.fr/site/natura2000/listeEspeces)
 
-## Ajout cartes GBIF
+## Ajout des milieux
+À partir des habitats associés aux taxons, selectionné dans le taxref, fait une liste des habitats associés ensuite ajoutée comme nouvel attribut
+dans la base de données.
+
+## Suppression de la répartition par classes d'altitudes
+Voir modèle de page [/templates/ficheEspece.html](/templates/ficheEspece.html) et [/static/chart.js](/static/chart.js)
+
+## Cartes
+
+### Ajout cartes INPN
+Voir modèle de page [/templates/ficheEspece.html](/templates/ficheEspece.html)
+```
+<object data="https://inpn.mnhn.fr/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93" type="image/svg+xml" width="90%" height="90%">
+```
+
+### Ajout cartes GBIF
 Voir [/data/scripts/gbif](/data/scripts/gbif])
 
 Export des cartes en leaflet avec R, en format html. Possible de le faire directement en javascript depuis FicheEspece.html : évite la nécessité d'une mise à jour mais risque de ralentir le chargement (?). 
 
-## Ajout des milieux
 
-À partir des habitats associés aux taxons
 
