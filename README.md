@@ -11,6 +11,7 @@ Atlas ayant servi d'inspiration :
 * https://clicnat.fr/
 
 Voir [/README.rst](/README.rst) la présentation par le PN des Écrins
+Voir repo d'origine : [https://github.com/PnX-SI/GeoNature-atlas](https://github.com/PnX-SI/GeoNature-atlas)
 
 # Personnalisation du style
 Modification de certains fichiers CSS et directement dans les modèles de pages html. 
