@@ -121,8 +121,8 @@ details > summary::-webkit-details-marker {
 
 /* modif footer */
 /* enlever margin sur pages presentation, données, partenaires, fiches espèces, fiche commune ; cf. page accueil comme référence */
-.footer {
+/*.footer {
     text-align: center;
     margin-left: 60px;
     margin: 0px 0;
-}
+}*/

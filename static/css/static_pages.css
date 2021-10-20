@@ -128,9 +128,10 @@
     font-size: 50px;
 }
 
-footer {
+/* modif pour enlever l'ajout d'une marge */
+/*footer {
     margin: 50px 0;
-}
+}*/
 
 @media(max-width:1200px) {
     .headline h1 {

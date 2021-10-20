@@ -47,7 +47,7 @@
             ================================================== -->
             <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: -15px; margin-bottom: 0px;">
               <div class="carousel-inner" role="listbox">
-                <div class="item active" style="background-image: url({{url_for('static', filename='custom/images/concours_prairies_fleuries.jpg') }}) ; background-size: cover; background-position: center center;">
+                <div class="item active" style="background-image: url({{url_for('static', filename='custom/images/00-donnees.jpg') }}) ; background-size: cover; background-position: center center;">
                   <div class="container">
                     <div class="carousel-caption">
                       <h1>FAQ - Données de {{configuration.NOM_APPLICATION}}</h1>
@@ -72,10 +72,10 @@
                   <div class="faq__content">
 			<p>
 			Les données sont issues de sources multiples : observations effectuées directement par les agents du {{configuration.STRUCTURE}} dans le cadre de leurs missions, données partagées par des partenaires, produites par des prestataires lors d’études, observations transmises par des habitants.
-			En majorité, ces données sont produites par des structures publiques ou par des associations naturalistes financées dans le cadre de projet avec des financements publics.
+			En grande partie, ces données sont produites par des structures publiques ou par des associations naturalistes financées dans le cadre de projet avec des financements publics.
 			</p>
 			<p>
-			En savoir plus sur les fournisseurs et producteurs de données <a href="partenaires" target='_blank'>sur la page partenaires <span class='glyphicon glyphicon-link'></span></a>.
+			En savoir plus sur les fournisseurs et producteurs de données <a href="partenaires" target='_blank'>sur la page partenaires <span class='glyphicon glyphicon-link'></span></a> et dans l'onglet "source" des fiches espèces.
 			</p>
                   </div>
                 </details>
@@ -89,6 +89,9 @@
                 	Elles sont saisies à l’aide de <a href="https://geonature.fr/" target='_blank'>GeoNature</a>,  un ensemble d'outils développés par les parcs nationaux de 
                 	France, disponibles sous licence libre et basé sur les référentiels du <a href="https://inpn.mnhn.fr/informations/sinp/presentation" target='_blank'>SINP</a>.
                 	</p>
+			<p>
+			Approfondissez en consultant les définitions du <a href="https://inpn.mnhn.fr/informations/glossaire" target="_blank">glossaire de l'INPN <span class='glyphicon glyphicon-book'></span></a>.
+			</p>
                   </div>
                 </details>
                 <hr class="custom">
@@ -110,7 +113,7 @@
                   <summary>À quoi servent ces données ?</summary>
                   <div class="faq__content">
                   	<p>
-                  	Ces données sont utiles au {{configuration.STRUCTURE}} dans le cadre de ses <a href="presentation#missions">missions de connaissance et de protection du patrimoine naturel</a>. 
+                  	Ces données sont utiles au {{configuration.STRUCTURE}} dans ses <a href="presentation#missions">missions de connaissance et de protection du patrimoine naturel</a>. 
 			Elles sont diffusées dans le cadre du <a href="https://inpn.mnhn.fr/informations/sinp/presentation" target='_blank'>SINP</a> et participent à la 
 			protection locale, régionale, nationale et internationale de la biodiversité, enjeu pour lequel le Parc s’engage dans 
 			<a href='https://www.parc-naturel-normandie-maine.fr/le-projet-de-charte-redaction.html' target ='_blank'>sa nouvelle charte</a>.
@@ -124,7 +127,7 @@
                 <hr class="custom">
 
                 <details>
-                  <summary>Comment bien intérpréter ces données ?</summary>
+                  <summary>Comment bien interpréter ces données ?</summary>
                   <div class="faq__content">
                   	<p>
                   	Les données permettent de dresser des inventaires de présence et de connaître la première et la dernière observation d’une espèce. 
@@ -133,7 +136,7 @@
                   	</p>
                   	<p>
                   	Il est important de rappeler en effet que les données présentées, en particulier sous forme de carte, correspondent à une représentation des connaissances 
-			actuellement disponibles. La répartition d’une espèce peut indiquer une réelle absence ou simplement qu’aucune information n’est disponible dans cette zone à ce jour. 
+			actuellement disponibles. La répartition d’une espèce peut indiquer une réelle absence ou simplement qu’aucune information n’est connue dans cette zone à ce jour. 
 			En outre, les données sont issues de différents protocoles de collectes. Les dénombrements d’observations correspondent donc plutôt à la pression d’observation qu'aux effectifs réels. 
                   	</p>
                   	<p>
@@ -144,7 +147,7 @@
                   	Enfin, toutes les données ne sont pas diffusables publiquement du fait de leur 
 			<a href='https://inpn.mnhn.fr/programme/donnees-observations-especes/references/sensibilite' target='_blank'>sensibilité</a>. 
 			Espèces rares protégées, animaux juvéniles ou encore nids 
-			ne sont par exemple pas diffusés. C’est pourquoi les localisations sont aggrégées l’échelle des 
+			ne sont par exemple pas diffusés. C’est pourquoi les localisations sont agrégées l’échelle des 
 			<a href='https://inpn.mnhn.fr/telechargement/cartes-et-information-geographique' target='_blank'>carreaux INPN de 5 km</a>.
                   	</p>
                   </div>
