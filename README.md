@@ -165,9 +165,93 @@ Voir modèle de page [/templates/ficheEspece.html](/templates/ficheEspece.html)
 ```
 
 ### Ajout cartes GBIF
-Voir [/data/scripts/gbif](/data/scripts/gbif])
+Voir [/data/scripts/gbif](/data/scripts/gbif)
 
 Export des cartes en leaflet avec R, en format html. Possible de le faire directement en javascript depuis FicheEspece.html : évite la nécessité d'une mise à jour mais risque de ralentir le chargement (?). 
 
+## Modification de "observateurs" en "sources"
+Remplace les noms d'observateurs par les noms des sources.
+Voir [/data/atlas.sql](/data/atlas.sql)
 
+```
+--Vue noms des structures pour remplacer observateurs
+CREATE OR REPLACE VIEW synthese.obs_structures
+AS SELECT selection.id_synthese,
+    string_agg(selection.nom_structures::text, ', '::text) AS nom_structures
+   FROM ( SELECT s.id_synthese,
+            bo.nom_organisme AS nom_structures
+           FROM synthese.synthese s
+             LEFT JOIN gn_meta.cor_dataset_actor cda ON cda.id_dataset = s.id_dataset
+             LEFT JOIN utilisateurs.bib_organismes bo ON bo.id_organisme = cda.id_organism
+          WHERE cda.id_organism IS NOT NULL
+        UNION
+         SELECT s.id_synthese,
+            concat_ws(' '::text, tr.nom_role, tr.prenom_role) AS nom_structures
+           FROM synthese.synthese s
+             LEFT JOIN gn_meta.cor_dataset_actor cda ON cda.id_dataset = s.id_dataset
+             LEFT JOIN utilisateurs.t_roles tr ON tr.id_role = cda.id_role
+          WHERE cda.id_role IS NOT NULL) selection
+  GROUP BY selection.id_synthese;
 
+--DROP materialized view atlas.vm_observations;
+CREATE MATERIALIZED VIEW atlas.vm_observations AS
+    SELECT s.id_synthese AS id_observation,
+        s.insee,
+        s.dateobs,
+        os.nom_structures AS observateurs,
+        s.altitude_retenue,
+        s.the_geom_point::geometry('POINT',3857),
+        s.effectif_total,
+        tx.cd_ref,
+        st_asgeojson(ST_Transform(ST_SetSrid(s.the_geom_point, 3857), 4326)) as geojson_point,
+        diffusion_level
+    FROM synthese.syntheseff s
+    LEFT JOIN atlas.vm_taxref tx ON tx.cd_nom = s.cd_nom
+    LEFT JOIN synthese.obs_structures os ON os.id_synthese = s.id_synthese
+    JOIN atlas.t_layer_territoire m ON ST_Intersects(m.the_geom, s.the_geom_point);
+```
+
+Voir [/data/modeles/repositories/vmObservationsRepository.py](/data/modeles/repositories/vmObservationsRepository.py)
+```
+def observersParser(req):
+    setObs = set()
+    tabObs = list()
+    for r in req:
+        if r.observateurs != None:
+            ### tabObs = r.observateurs.replace(" & ", ", ").split(", ") ### ORIGINAL            		
+            tabObs = r.observateurs.split(", ") ### MODIF
+        for o in tabObs:
+            #o = o.lower() ### MODIF
+            setObs.add(o)
+    finalList = list()
+    for s in setObs:
+        tabInter = s.split(" ")
+        fullName = str()
+        i = 0
+        while i < len(tabInter):
+            if i == len(tabInter) - 1:
+                #fullName += tabInter[i].capitalize() ### MODIF
+                fullName += tabInter[i] ### MODIF
+            else:
+                #fullName += tabInter[i].capitalize() + " "
+                fullName += tabInter[i] + " " ### MODIF               
+            i = i + 1
+        finalList.append(fullName)
+    return sorted(finalList)
+```
+
+Voir [/data/modeles/repositories/vmCorTaxonAttribut.py](/data/modeles/repositories/vmCorTaxonAttribut.py)
+Remplacer séparation des milieux '|' par '<br>'
+```
+    for r in req:
+        if r.id_attribut == attrDesc:
+            descTaxon['description'] = r.valeur_attribut
+        elif r.id_attribut == attrComment:
+            descTaxon['commentaire'] = r.valeur_attribut
+        elif r.id_attribut == attrMilieu:
+            #descTaxon['milieu'] = r.valeur_attribut.replace("&" , " | ")
+            descTaxon['milieu'] = r.valeur_attribut
+        elif r.id_attribut == attrChoro:
+            descTaxon['chorologie'] = r.valeur_attribut
+    return descTaxon
+```

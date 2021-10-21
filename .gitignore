@@ -1,3 +1,4 @@
 /atlas/configuration/config.py
 /atlas/configuration/settings.ini
 /log/*
+/__pycache__/*
