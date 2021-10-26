@@ -135,9 +135,11 @@ where selection.licencebis <> '' and selection.sourcebis <> '' and selection.id_
 ;
 ```
 plus une tâche cron
-`sudo su postgres`
-`crontab -e`
-`0 4 * * * psql -d geonature2db -f /home/pnr/taxhub/data/scripts/pnrnm/update_auteur_t_medias.sql`
+```
+sudo su postgres
+crontab -e
+0 4 * * * psql -d geonature2db -f /home/pnr/taxhub/data/scripts/pnrnm/update_auteur_t_medias.sql
+```
 
 ## Ajout descriptions INPN
 Voir [/data/scripts/Taxhub/descriptions](/data/scripts/Taxhub/descriptions])
@@ -241,7 +243,7 @@ def observersParser(req):
 ```
 
 Voir [/data/modeles/repositories/vmCorTaxonAttribut.py](/data/modeles/repositories/vmCorTaxonAttribut.py)
-Remplacer séparation des milieux '|' par '<br>'
+Remplacer séparation des milieux '|' par `'<br>'`
 ```
     for r in req:
         if r.id_attribut == attrDesc:
