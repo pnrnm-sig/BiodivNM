@@ -126,3 +126,10 @@ details > summary::-webkit-details-marker {
     margin-left: 60px;
     margin: 0px 0;
 }*/
+
+/* modif pop-up leaflet */
+.leaflet-popup.leaflet-zoom-animated {
+    overflow: auto;
+    height:100px;
+    width: 300px;
+}

@@ -45,7 +45,7 @@ sudo crontab -e
 Sélection aléatoire de 12 taxons parmi les 36 les plus observés dans les 15 jours avant/après la date du jour, 
 toutes années confondues. Sélection uniquement des taxons avec une photo.
 
-Modification de la création de vm_taxons_plus_observes, voir [/static/custom/images/accueil-intro](/static/custom/images/accueil-intro)
+Modification de la création de vm_taxons_plus_observes, voir [/data/atlas.sql](/data/atlas.sql)
 ```
 CREATE MATERIALIZED VIEW atlas.vm_taxons_plus_observes AS
 SELECT * 
