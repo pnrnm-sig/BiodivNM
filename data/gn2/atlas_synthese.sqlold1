@@ -1,0 +1,141 @@
+-- MODIF PNRNM
+-- ajout de champs : précision et validation
+-- ajout champ info_geom_point en lien avec modif the_geom_point
+-- modif de the_geom_point pour prendre en compte
+-- modification de la sélection pour exclure données sensible sans diff (si mauvais lien avec champ diff)  => OR s.id_nomenclature_sensitivity = 71
+-- ajouts des vues pour anonymiser ou pas les noms diffusés
+
+--
+
+-- Création de vue pour anonymiser ou pas les noms en fonction des producteurs / diffuseurs
+-- et si l'info d'anonymisation est connue dans la table t_roles
+CREATE MATERIALIZED VIEW synthese.diff_observers
+TABLESPACE pg_default
+AS WITH role_anonym0 AS (
+         SELECT concat(tr.nom_role, ' ', tr.prenom_role) AS nom,
+                CASE
+                    WHEN (tr.champs_addi ->> 'anonym'::text) = '["false"]'::text THEN false
+                    ELSE true
+                END AS anonym
+           FROM utilisateurs.t_roles tr
+        ), role_anonym AS (
+         SELECT role_anonym0.nom,
+            bool_or(role_anonym0.anonym) AS anonym
+           FROM role_anonym0
+          GROUP BY role_anonym0.nom
+        ), obs_orga_anonym AS (
+         SELECT DISTINCT s.id_synthese
+           FROM synthese.synthese s
+             LEFT JOIN gn_meta.cor_dataset_actor cda ON cda.id_dataset = s.id_dataset
+          WHERE (cda.id_organism = ANY (ARRAY[2, 3, 100, 1000017])) AND (cda.id_nomenclature_actor_role = ANY (ARRAY[370, 369]))
+        ), obs_producteur_anonym AS (
+         SELECT DISTINCT s.id_synthese
+           FROM synthese.synthese s
+             LEFT JOIN gn_meta.cor_dataset_actor cda ON cda.id_dataset = s.id_dataset
+          WHERE (cda.id_organism = ANY (ARRAY[2, 3, 100, 1000017])) AND cda.id_nomenclature_actor_role = 370
+        ), jdd_publiqu AS (
+         SELECT DISTINCT s.id_synthese
+           FROM synthese.synthese s
+             LEFT JOIN gn_meta.t_datasets td ON td.id_dataset = s.id_dataset
+          WHERE td.id_acquisition_framework = 27
+        ), listenom AS (
+         SELECT s.id_synthese,
+            s.id_dataset,
+            unnest(string_to_array(s.observers::text, ', '::text)) AS nom
+           FROM synthese.synthese s
+        ), anonymisation AS (
+         SELECT ln.id_synthese,
+                CASE
+                    WHEN jdp.id_synthese IS NOT NULL THEN ln.nom
+                    WHEN ooa.id_synthese IS NULL AND ra.anonym IS FALSE THEN ln.nom
+                    WHEN ooa.id_synthese IS NOT NULL AND ra.anonym IS FALSE THEN ln.nom
+                    WHEN ooa.id_synthese IS NOT NULL AND opa.id_synthese IS NULL AND ra.nom IS NULL THEN ln.nom
+                    ELSE 'Anonymisé'::text
+                END AS nom
+           FROM listenom ln
+             LEFT JOIN role_anonym ra ON ln.nom = ra.nom
+             LEFT JOIN obs_orga_anonym ooa ON ooa.id_synthese = ln.id_synthese
+             LEFT JOIN obs_producteur_anonym opa ON opa.id_synthese = ln.id_synthese
+             LEFT JOIN jdd_publiqu jdp ON jdp.id_synthese = ln.id_synthese
+        )
+ SELECT a.id_synthese,
+    string_agg(a.nom, ', '::text) AS observers
+   FROM anonymisation a
+  GROUP BY a.id_synthese;
+  
+ -- View indexes:
+CREATE UNIQUE INDEX vm_diffobservers_id ON synthese.diff_observers USING btree (id_synthese);
+
+-- Creation d'une vue permettant de reproduire le contenu de la table du même nom dans les versions précédentes
+
+-- synthese.syntheseff source
+CREATE MATERIALIZED VIEW synthese.syntheseff
+TABLESPACE pg_default
+AS WITH areas AS (
+         SELECT DISTINCT ON (sa.id_synthese, t.type_code) sa.id_synthese,
+            sa.id_area,
+            a.centroid,
+            st_transform(a.centroid, 4326) AS centroid_4326,
+            t.type_code
+           FROM synthese.cor_area_synthese sa
+             JOIN ref_geo.l_areas a ON sa.id_area = a.id_area
+             JOIN ref_geo.bib_areas_types t ON a.id_type = t.id_type
+          WHERE t.type_code::text = ANY (ARRAY['M10'::character varying, 'COM'::character varying, 'DEP'::character varying]::text[])
+        ), obs_data AS (
+         SELECT s.id_synthese,
+            s.cd_nom,
+            s.id_dataset,
+            date(s.date_min) AS dateobs,
+            do2.observers AS observateurs,
+            (s.altitude_min + s.altitude_max) / 2 AS altitude_retenue,
+                CASE
+                    WHEN s.id_nomenclature_diffusion_level = 139 AND s.id_nomenclature_sensitivity = 67 OR s.id_nomenclature_diffusion_level = 144 THEN st_transform(s.the_geom_point, 4326)
+                    WHEN s.id_nomenclature_diffusion_level = 140 THEN ( SELECT a.centroid_4326
+                       FROM areas a
+                      WHERE a.id_synthese = s.id_synthese AND a.type_code::text = 'COM'::text
+                     LIMIT 1)
+                    WHEN s.id_nomenclature_diffusion_level = 141 OR s.id_nomenclature_sensitivity = 69 AND s.id_nomenclature_diffusion_level <> 142 THEN ( SELECT a.centroid_4326
+                       FROM areas a
+                      WHERE a.id_synthese = s.id_synthese AND a.type_code::text = 'M10'::text
+                     LIMIT 1)
+                    WHEN s.id_nomenclature_diffusion_level = 142 THEN ( SELECT a.centroid_4326
+                       FROM areas a
+                      WHERE a.id_synthese = s.id_synthese AND a.type_code::text = 'DEP'::text
+                     LIMIT 1)
+                    ELSE st_transform(s.the_geom_point, 4326)
+                END AS the_geom_point,
+                CASE
+                    WHEN s.id_nomenclature_diffusion_level = 139 AND s.id_nomenclature_sensitivity = 67 OR s.id_nomenclature_diffusion_level = 144 THEN 'MAX'::text
+                    WHEN s.id_nomenclature_diffusion_level = 140 THEN 'COM'::text
+                    WHEN s.id_nomenclature_diffusion_level = 141 OR s.id_nomenclature_sensitivity = 69 AND s.id_nomenclature_diffusion_level <> 142 THEN 'KM10'::text
+                    WHEN s.id_nomenclature_diffusion_level = 142 THEN 'DEP'::text
+                    ELSE 'MAX'::text
+                END AS info_geom_point,
+            s.count_min AS effectif_total,
+            dl.cd_nomenclature::integer AS diffusion_level,
+            s."precision",
+            s.id_nomenclature_valid_status AS validation
+           FROM synthese.synthese s
+             LEFT JOIN synthese.t_nomenclatures dl ON s.id_nomenclature_diffusion_level = dl.id_nomenclature
+             LEFT JOIN synthese.t_nomenclatures st ON s.id_nomenclature_observation_status = st.id_nomenclature
+             LEFT JOIN synthese.diff_observers do2 ON do2.id_synthese = s.id_synthese
+          WHERE (NOT dl.cd_nomenclature::text = '4'::text OR s.id_nomenclature_diffusion_level IS NULL OR s.id_nomenclature_sensitivity = 71 OR s.id_nomenclature_sensitivity = 70 or or s.id_nomenclature_valid_status = 320) AND st.cd_nomenclature::text = 'Pr'::text
+        )
+ SELECT d.id_synthese,
+    d.id_dataset,
+    d.cd_nom,
+    d.dateobs,
+    d.observateurs,
+    d.altitude_retenue,
+    d.the_geom_point,
+    d.effectif_total,
+    c.insee,
+    d.diffusion_level,
+    d."precision",
+    d.validation,
+    d.info_geom_point
+   FROM obs_data d
+     JOIN atlas.l_communes c ON st_intersects(d.the_geom_point, c.the_geom);
+
+ -- View indexes:
+CREATE UNIQUE INDEX vm_syntheseff_id ON synthese.syntheseff USING btree (id_synthese);

@@ -1,0 +1,98 @@
+{% block otherInformations %}
+    <div class="card mt-4" id="otherInformationsPanel">
+        <div class="row m-2" id="otherInformations">
+            <ul class="nav nav-tabs">
+                {% if configuration.ORGANISM_MODULE %}
+                    <li class="normal nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#organisms">
+                            <b>{{ organisms|length }} </b> {{ _('organisms')|lower if organisms|length > 1 else _('organism')|lower }}
+                        </a>
+                </li>
+                {% endif %}
+
+                {% if configuration.DISPLAY_OBSERVERS %}
+                    <li class="normal nav-item"><a class="nav-link" data-toggle="tab" href="#observateurs">
+                        <b>{{ observers|length }} </b> {{ _('observers')|lower if observers|length > 1 else _('observer')|lower }}
+                    </a></li>
+                {% endif %}
+            </ul>
+
+
+            <div class="tab-content" style="width:100%;">
+                <!--- oberservers tab-->
+                {% if configuration.DISPLAY_OBSERVERS %}
+                    <div id="observateurs" class="tab-pane fade">
+                        {% for o in observers %}
+                            {{ o }}
+                            {% if  not loop.last %}
+                                -
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if configuration.ORGANISM_MODULE %}
+                <!-- organism tab -->
+                    <div id="organisms" class="tab-pane fade show active">
+                        <p class="small text-justify" style="color:#b1b1b1;"><b>Avertissement :</b> Seul les producteurs et les fournisseurs 
+                             renseignés dans la base de données sont affichés ci-dessous. 
+                            Si plusieurs organismes ont contribués à un même jeu de données, ils auront une part égale d'aide à la prospection. 
+                         Les pourcentages affichés ne sont par conséquent pas cumulables entre eux.</p>
+                        <ul class="list-group w-100">
+                            {% for o in organisms %}
+                                <li id="organismListItem" class="media border-bottom p-2"
+                                    id_organism="{{ o['nom_organism'] }}">
+                               <div class="pictoImgList mr-2" data-toggle="tooltip"
+                                 data-placement="right">
+                                    <span class="float-right"></span>
+                                    <div class="pictoImgList mr-2" data-toggle="tooltip"
+                                    data-placement="right">
+                                        {% if o['url_logo']!= None %}
+                                            {% if not o['url_organism'] in (None, '') %}
+                                            <a href="{{ o['url_organism'] }}" target="_blank">
+                                                <img class="mx-auto d-block" src="{{ o['url_logo'] }}" style='width:100px'>
+                                            </a>
+                                            {% else %}
+                                                <img class="mx-auto d-block" src="{{ o['url_logo'] }}" style='width:100px'>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="media-body" style="padding-left:30px">
+                                    <span class="float-right"></span>
+                                    <h5 class="mt-0 mb-1 ">
+                                        <span id="name"><b>{{ o['nom_organism'] }}</b></span>
+                                    </h5>
+
+                                    <strong>{{ _('organism.participation') }}
+                                        {{ o['nb_observation']}}
+                                        {% if o['nb_observation'] > 1 %}
+                                            {{ _('observations') }}
+                                        {% else %}
+                                            {{ _('observation') }}
+                                        {% endif %}
+                                    </strong>
+                                    <br>{{ _('organism.prospection') }} : <strong>{{ "%.2f"|format(o['nb_observation']/listTaxons.nbObsTotal*100) }} %</strong>
+                                    <br>
+                                    <br>
+                                    <span class="float-right">
+                                        <a class="badge badge-primary" href="{{ url_for('main.ficheOrganism', id_organism=o['id_organism']) }}"
+                                            data-toggle="tooltip" style="color: white;" onmouseover="this.style.color='var(--main-color)';"
+                                            onmouseout="this.style.color='white';"
+                                            title="{{ _('check.organism.sheet') }}" data-placement="left">
+                                         <i class="fas fa-list fa-fw"></i> {{ _('organism.sheet') }}</i>
+                                        </a>
+                                    </span>
+
+                                </div>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            </div>
+        </div>
+{% endblock %}

@@ -5,6 +5,7 @@ LIMIT TO (ref_nomenclatures.t_nomenclatures, ref_nomenclatures.bib_nomenclatures
 FROM SERVER geonaturedbserver INTO synthese;
 
 -- Schéma ref_geo necessaire pour créer la vue syntheseff qui s'appuie sur le ref_geo pour la sensibilité
+
 DROP SCHEMA IF EXISTS ref_geo CASCADE;
 CREATE SCHEMA IF NOT EXISTS ref_geo;
 
@@ -13,6 +14,15 @@ LIMIT TO (ref_geo.l_areas, ref_geo.li_municipalities, ref_geo.bib_areas_types)
 FROM SERVER geonaturedbserver INTO ref_geo ;
 
 IMPORT FOREIGN SCHEMA gn_synthese
-LIMIT TO (gn_synthese.synthese, gn_synthese.cor_area_synthese)
+LIMIT TO (gn_synthese.synthese, gn_synthese.cor_area_synthese,gn_synthese.syntheseatlas,gn_synthese.diff_observers)
 FROM SERVER geonaturedbserver INTO synthese;
 
+-- Schéma utilisateurs necessaire pour ajouter la dimension organisme à l'atlas
+
+IMPORT FOREIGN SCHEMA utilisateurs
+LIMIT TO (utilisateurs.bib_organismes,utilisateurs.t_roles)
+FROM SERVER geonaturedbserver INTO utilisateurs;
+
+IMPORT FOREIGN SCHEMA gn_meta
+LIMIT TO (gn_meta.cor_dataset_actor,gn_meta.t_datasets,gn_meta.t_acquisition_frameworks)
+FROM SERVER geonaturedbserver INTO gn_meta;

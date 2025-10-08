@@ -1,17 +1,12 @@
 # -*- coding:utf-8 -*-
 
-from ..utils import engine
-from sqlalchemy import MetaData, Table
 import unicodedata
-from ..configuration import config
 
 
 def deleteAccent(string):
     if string is None:
         return None
-    return (
-        unicodedata.normalize("NFD", string).encode("ascii", "ignore").decode("utf-8")
-    )
+    return unicodedata.normalize("NFD", string).encode("ascii", "ignore").decode("utf-8")
 
 
 def findPath(row):

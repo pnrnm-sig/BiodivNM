@@ -13,19 +13,19 @@ db_host=localhost
 db_port=5432
 
 # Nom de la base de données de l'application
-db_name=
+db_name=geonatureatlas
 
 # Nom de l'utilisateur BDD, utilisé par l'application atlas, lecteur des vues matérialisées uniquement
-user_pg=
+user_pg=geonatatlas
 
 # Password de l'utilisateur BDD, utilisé par l'application, lecteur des vues matérialisées uniquement
-user_pg_pass=
+user_pg_pass=b11Hlj8I3I$
 
 # Nom du propriétaire de la BDD atlas, utilisé pour créer et mettre à jour la BDD
-owner_atlas=
+owner_atlas=geonatadmin
 
 # Password du propriétaire de la BDD
-owner_atlas_pass=
+owner_atlas_pass=02Yee9I{2[pY
 
 # GeoNature-atlas est-il connecté à une BDD GeoNature ?
 geonature_source=true
@@ -43,19 +43,19 @@ geonature_fdw=true
 # pour vous connecter à une autre BDD mère
 
 # Host de la BDD GeoNature source
-db_source_host=
+db_source_host=149.202.129.107
 
 # Port de la BDD GeoNature source
-db_source_port=
+db_source_port=5432
 
 # Nom de la BDD GeoNature source
-db_source_name=
+db_source_name=geonature2db
 
 # Nom de l'utilisateur atlas dans la BDD GeoNature source (lecture seule)
-atlas_source_user=
+atlas_source_user=geonatatlas
 
 # Pass de l'utilisateur atlas dans la BDD GeoNature source (lecture seule)
-atlas_source_pass=
+atlas_source_pass=b11Hlj8I3I$
 
 
 #############################
@@ -91,6 +91,8 @@ colonne_nom_commune=NOM
 
 # Chemin vers le SHP de l'emprise du territoire
 limit_shp=/home/pnr/atlas/data/ref/territoire.shp
+limit_shp_limites=/home/pnr/atlas/data/ref/territoire_limites.shp
+limit_shp_ajoutvp=/home/pnr/atlas/data/ref/territoire_limites_ajoutvp.shp
 
 ##### MAILLES #####
 
@@ -99,7 +101,7 @@ limit_shp=/home/pnr/atlas/data/ref/territoire.shp
 metropole=true
 
 # Choisissez alors la taille de vos mailles à utiliser (en km) / Valeurs possibles 1, 5 ou 10
-taillemaille=1
+taillemaille=5
 
 # Si 'metropole=false', rajoutez dans le dossier /data/ref un SHP des mailles de votre territoire et renseignez son chemin
 chemin_custom_maille=/home/pnr/atlas/data/ref/custom_mailles.shp

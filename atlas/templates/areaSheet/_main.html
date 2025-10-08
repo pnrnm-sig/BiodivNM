@@ -1,0 +1,140 @@
+{% extends "templates/core/layout.html" %}
+
+{% block title %}
+    {# Personnalisez ici le titre de la page (celui qui est affiché dans l'onglet du navigateur) #}
+    {% if sheetType =='commune' %}
+        {{ _('municipality.of') }} {{ areaInfos.areaName }}
+    {% else %}
+        {{ areaInfos.typeName }} - {{ areaInfos.areaName }}
+    {% endif %}
+{% endblock %}
+
+{% block metaTags %}
+    {# Ajoutez ici les balises méta utilisées pour le SEO #}
+{% endblock %}
+
+{% block additionalHeaderAssets %}
+    {# Ajoutez ici les assets complémentaires qui seront dans le bloc <head></head> #}
+    <script src="{{ url_for('static', filename='node_modules/leaflet.markercluster/dist/leaflet.markercluster.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet.markercluster/dist/MarkerCluster.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css') }}"/>
+    <!-- DataTable -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/listEspeces.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icones.css') }}"/>
+
+    <!-- Matomo -->
+    <script type="text/javascript" src="{{ url_for('static', filename='matomo.js') }}"></script>
+
+    <!-- favicon / si ne fonctionne pas, mettre fichiers à la racine /atlas-->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='custom/images/favicon/favicon.ico') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='custom/images/favicon/apple-touch-icon.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='custom/images/favicon/favicon-32x32.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='custom/images/favicon/favicon-16x16.png') }}">
+	<link rel="manifest" href="{{ url_for('static', filename='custom/images/favicon/site.webmanifest') }}">
+	<link rel="mask-icon" href="{{ url_for('static', filename='custom/images/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+{% endblock %}
+
+
+
+
+
+
+{% block content %}
+    {# Ajoutez ici coeur de la page #}
+    <div class="row flex-grow-1 p-0 m-0 border-bottom">
+        <div class="col-12 d-flex flex-column m-0 p-0">
+            <div class="bg-light text-center border-bottom border-right p-2">
+                {% if configuration.EXTENDED_AREAS %}
+                    {% include 'templates/areaSheet/surrounding_areas.html' %}
+                {% endif %}
+                {% if sheetType =='commune' %}
+                    <h1><b> {{ _('municipality.of') }} {{ areaInfos.areaName }}</b></h1>
+                {% else %}
+                    <h1><b>{{ areaInfos.typeName }} - {{ areaInfos.areaName }}</b></h1>
+                {% endif %}
+                {% include 'templates/core/statHierarchy.html' %}
+            </div>
+            </div>
+            <div class="col-12 d-flex flex-column m-0 p-0">
+            <div class="bg-light text-center border-bottom border-right p-2">
+                <div id="inpnLink">
+                    <a href='https://inpn.mnhn.fr/collTerr/biodiversity/INSEEC{{ areaInfos.areaCode }}' target="_blank">
+                        <img width="85px" src="{{ url_for('static', filename='images/logo_inpn.png') }}"
+                             data-toggle="tooltip" data-original-title="Voir la fiche territoire sur l'INPN"
+                             data-placement="right">
+                    </a>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="row p-0 m-0 border-bottom">
+            <div class="col-6 d-flex flex-column m-0 p-0">
+                <div class="bg-light p-2">
+                        <div class="col d-flex bg-light p-2">
+                {% if sheetType =='commune' %}
+                    <h5 id="titleMap"><i class="fa fa-map"></i> {{ configuration.NB_LAST_OBS }} {{ _('last.obs.municipality') }}
+                        <i>{{ areaInfos.areaName }}</i></h5>
+                {% else %}
+                    <h5 id="titleMap"><i class="fa fa-map"></i> {{ configuration.NB_LAST_OBS }} {{ _('last.obs.zone') }}
+                        <i>{{ areaInfos.areaName }}</i></h5>
+                {% endif %}
+            </div>
+                <div class="col d-flex bg-light p-2">
+                    <div id="map" style="min-height:250px;flex:1;">
+                        {% include 'templates/core/loaderSpinner.html' %}</div>
+                </div>
+                </div>
+            <!-- Message d'information sous les cartes des fiches espèces et communes -->
+                    <p class="alert msg_map text-justify bg-light" style="margin:0px;font-size: 12px;">
+                        <b>Avertissement :</b> les données visualisables reflètent l'état d'avancement des connaissances et/ou la disponibilité des données existantes sur le territoire du Parc & Géoparc : elles ne peuvent en aucun cas être considérées comme exhaustives.
+                        <b>En savoir plus sur <a href="{{url_for('main.get_staticpages', page='donnees')}}">les données <span class="fa fa-cog"></a> et sur <a href="{{url_for('main.get_staticpages', page='partenaires')}}">les partenaires <span class="fa fa-handshake"/></b></a>
+                                </p>
+
+
+                                
+                        <div class="col d-flex mb-2">
+                                {% include 'templates/areaSheet/otherInformations.html' %}
+                        </div>
+                </div>
+            <div class="col-6 d-flex flex-column bg-light p-2">
+              {% include 'templates/core/listTaxonsArea.html' %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block additionalFooterAssets %}
+    {# Ajoutez ici les assets complémentaires qui seront en bas de page #}
+    <script type="text/javascript">
+        var configuration = {{configuration|tojson}};
+        var observations = {{observations|tojson}};
+        var areaInfos = {{ areaInfos | tojson }};
+        var sheetType = {{ sheetType|tojson }};
+        var communeArea = false;
+        if (sheetType === 'commune') {
+            var communeArea = true;
+        }
+        ;
+        var url_limit_territory = "{{url_for('static', filename='custom/territoire.json') }}";
+        var url_limit_vp_territory = "{{url_for('static', filename='custom/territoire_vp.json') }}";
+    </script>
+    <script src="{{ url_for('static', filename='custom/maps-custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='listeEspeces.js') }}"></script>
+    <script src="{{ url_for('static', filename='mapGenerator.js') }}"></script>
+    <script src="{{ url_for('static', filename='mapAreas.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+        // load lazy the images
+        $(".lazy").lazy();
+
+        // load lazy on scroll
+        $("#taxonListArea").scroll(function() {
+            $(".lazy").lazy();
+        });
+    </script>
+{% endblock %}

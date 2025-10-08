@@ -1,0 +1,340 @@
+<!-- Réalisée à partir de https://startbootstrap.com/template-overviews/one-page-wonder/ et http://getbootstrap.com/examples/carousel/ -->
+<!DOCTYPE html>
+<html>
+   <head>
+        <meta charset="utf-8" />
+        <title>Présentation | {{configuration.NOM_APPLICATION}}</title>
+        <!-- Jquery -->
+        <script type=text/javascript src="{{url_for('static', filename='lib/jquery-1.12.4.min.js') }}"></script>
+		<script type=text/javascript src="{{url_for('static', filename='lib/jquery-ui.min.js') }}"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/jquery-ui.css') }}" />
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"></link>
+        <script type=text/javascript src="{{url_for('static', filename='lib/bootstrap/js/bootstrap.min.js') }}"></script>
+
+	<!-- custom font Parc -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Amaranth:wght@400;700&family=Dosis:wght@500;700&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
+
+	<!-- CSS Atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/atlas.css') }}" /> <!-- css général atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/static_pages.css') }}" /> <!-- css général pages statiques -->
+        <link rel="stylesheet" href="{{url_for('static', filename='custom/custom.css') }}" /> <!-- css overidde - modif des polices et barre du dessus -->
+
+	<!-- favicon / si ne fonctionne pas, mettre fichiers à la racine /atlas-->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='custom/images/favicon/favicon.ico') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='custom/images/favicon/apple-touch-icon.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='custom/images/favicon/favicon-32x32.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='custom/images/favicon/favicon-16x16.png') }}">
+	<link rel="manifest" href="{{ url_for('static', filename='custom/images/favicon/site.webmanifest') }}">
+	<link rel="mask-icon" href="{{ url_for('static', filename='custom/images/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+
+	<!-- Matomo -->
+	<script type="text/javascript">
+	  var _paq = window._paq = window._paq || [];
+	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+		var u="https://www.parc-naturel-normandie-maine.fr/matomo/";
+		_paq.push(['setTrackerUrl', u+'matomo.php']);
+		_paq.push(['setSiteId', '4']);
+		var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+		g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<!-- End Matomo Code -->
+   </head>
+   <body  data-spy="scroll" data-target="#sommaire">
+    {% include 'templates/navbar.html' %}
+
+		<div id="sideBar">
+			{% include 'templates/sideBar.html' %}
+		</div>
+		<div class="container-fluid" id="page">
+
+
+            <!-- Carousel
+            ================================================== -->
+            <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: -15px; margin-bottom: 0px;">
+              <!-- Indicators -->
+              <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+                <li data-target="#myCarousel" data-slide-to="3"></li>
+                <li data-target="#myCarousel" data-slide-to="4"></li>
+                <li data-target="#myCarousel" data-slide-to="5"></li>
+              </ol>
+              <div class="carousel-inner" role="listbox">
+                <div class="item active" style="background-image: url({{url_for('static', filename='custom/images/00-accueil_presentation.jpg') }}) ; background-size: cover; background-position: center center;">
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>{{configuration.NOM_APPLICATION}}</h1>
+                      <p>Portail d’accès à la connaissance sur la nature de Normandie-Maine </p>
+					  <!-- <p><a class="btn btn-lg btn-default" href="#faune" role="button">En savoir plus</a></p> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="background-image: url({{url_for('static', filename='custom/images/01-galerie_photo.jpg') }}) ; background-size: cover; background-position: center center;">
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>Des milliers de photographies</h1>
+                      <p>Pour découvrir la richesse de la biodiversité du Parc & Géoparc</p>
+                      <p><a class="btn btn-lg btn-default" href="{{url_for('main.photos')}}" role="button">Visitez la galerie photos</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="background-image: url({{url_for('static', filename='custom/images/02-fiches_especes.jpg') }}) ; background-size: cover; background-position: top center;">
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>Des milliers de fiches espèces</h1>
+                      <p>Pour en savoir plus sur les espèces de Normandie-Maine</p>
+                      <p><a class="btn btn-lg btn-default" href="#fonctionnalites" role="button">En savoir plus</a></p>
+                    </div>
+                  </div>
+                </div>
+                 <div class="item" style="background-image: url({{url_for('static', filename='custom/images/03-fiches_communes.jpg') }}) ; background-size: cover; background-position: bottom center;">
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>Plus d'une centaine de fiches communes</h1>
+                      <p>Pour découvrir les espèces présentes par commune du Parc & Géoparc</p>
+                      <p><a class="btn btn-lg btn-default" href="#fonctionnalites" role="button">En savoir plus</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="background-image: url({{url_for('static', filename='custom/images/04-donnees.jpg') }}) ; background-size: cover; background-position: bottom center;">
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>FAQ - Tout savoir sur les données</h1>
+                      <p>Consultez les informations sur nos données d'observation de la biodiversité</p>
+                      <p><a class="btn btn-lg btn-default" href="atlas/donnees" role="button">Visitez la page consacrée aux données</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="background-image: url({{url_for('static', filename='custom/images/05-partenaires.jpg') }}) ; background-size: cover; background-position: bottom center;">
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>Tout savoir sur nos partenaires</h1>
+                      <p>Consultez la liste des acteurs impliqués dans l’inventaire du patrimoine naturel en Normandie-Maine</p>
+                      <p><a class="btn btn-lg btn-default" href="partenaires" role="button">Visitez la page consacrée aux partenaires</a></p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Précédent</span>
+              </a>
+              <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Suivant</span>
+              </a>
+            </div><!-- /.carousel -->
+
+            <div class="container presentation" style="margin-bottom: 20px;"> 
+            <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 10px; text-align:left; margin-top:10px;">
+              <div class="col-lg-8">
+                  <!-- Texte de présentation général -->
+
+                  <h2 id="general">{{configuration.NOM_APPLICATION}} : visualisez les données des espèces du {{configuration.STRUCTURE}}</h2>
+                  <p class="lead">
+                    Le {{configuration.STRUCTURE}} met à disposition les connaissances actuellement rassemblées sur la biodiversité de son territoire. 
+                  </p>
+                  <p class="lead">
+                    Biodiv’ Normandie-Maine permet à chacun de (re)découvrir la richesse de la faune, de la flore, et de la fonge (et plus encore) au sein du Parc & Géoparc, 
+                    grâce à des données d’observations mises à jour quotidiennement. 
+                    En parcourant ce portail interactif : approfondissez vos connaissances sur les espèces grâce à des descriptions et des cartes de répartition, 
+                    consultez la liste des observations par commune et, enfin, visualisez les nombreuses photographies des différentes espèces.
+                  </p>
+                  <p class="lead">
+                    En 2018 le Parc & Géoparc s’est doté d’une base de données GeoNature et d’une première version du portail {{configuration.NOM_APPLICATION}}. 
+                    Ce travail s’effectue en étroite collaboration avec le Conseil 
+                    départemental de l’Orne, l’AFFO et le PNR du Perche. Les données présentées ici sont le fruit du travail des agents du Parc & Géoparc, ainsi que de ses 
+                    partenaires et associations naturalistes du territoire.
+                  </p>
+              </div>
+
+              <div class="col-lg-4" style="border-radius: 0px; margin-top:20px; padding: 20px; text-align:left;border-left: 2px solid var(--main-color);font-size: 14px">
+                <p>
+                    <img src="https://www.parc-naturel-normandie-maine.fr/upload/item/reduites/_IMG1941.JPG" width="100%">
+                </p>
+                <p>
+                    Depuis sa création en 1975, le Parc naturel régional Normandie-Maine commande des études et recueille des données sur les espèces naturelles dans une démarche d’amélioration des connaissances. La décision de classement d'un territoire en Parc naturel régional est en effet fondée en partie sur la qualité et la spécificité de ses patrimoines naturels.
+                </p>
+                <p>
+                    Acquisition de connaissances, protection du patrimoine, éducation à l’environnement et information du public sur la nature figurent en bonne place parmi les missions du Parc. Le portail Biodiv’ Normandie-Maine s’inscrit dans cette démarche.
+                </p>
+                <p style="padding:0 0 0 20px;">
+                    <a href="https://www.parc-naturel-normandie-maine.fr/parc-naturel-regional.html" target="_bank"><span class="glyphicon glyphicon-eye-open"></span> En savoir plus sur le fonctionnement du Parc.</a>
+		</p>
+              </div>
+              <!--<div style="clear: both;"></div>-->
+              </div>
+
+              <!-- Three columns of text below the carousel -->
+             <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 10px; text-align:left; margin-top:20px;">
+              <div class="row">
+                <div class="col-lg-12">
+			<h3 class="featurette-heading" style="text-align: center;">Fonctionnalités<br/></h3>
+			<hr class="custom">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4" id="fonctionnalites" style="margin-top: 10px">
+                  <img class="img-circle" src="{{url_for('static', filename='custom/images/07-determination.jpg') }}" alt="Generic placeholder image" width="140" height="140">
+                  <h2><span class="text-muted">Fiches espèces</span></h2>
+                  <p>Retrouvez la fiche de chaque espèce avec leurs cartes de répartition, la fréquence mensuelle des observations, ainsi que des descriptions, cartes, médias, liens et informations complémentaires</p>
+                  <p><a class="btn btn-default" href="/espece/10979" role="button">Exemple &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4" style="margin-top: 10px">
+                  <img class="img-circle" src="{{url_for('static', filename='custom/images/08-loupe.jpg') }}" alt="Generic placeholder image" width="140" height="140">
+                  <h2><span class="text-muted">Fiches communes</span></h2>
+                  <p>Découvrez les espèces observées sur chaque commune du Parc & Géoparc et affichez la carte de la commune.</p>
+                  <p><a class="btn btn-default" href="/commune/72294" role="button">Exemple &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4" style="margin-top: 10px">
+                  <img class="img-circle" src="{{url_for('static', filename='custom/images/09-photographe.jpg') }}" alt="Generic placeholder image" width="140" height="140">
+                  <h2><span class="text-muted">Galerie photos</span></h2>
+                  <p>Découvrez les photographies des différentes espèces, réalisées par les agents du Parc & Géoparc et ses partenaires, transmises par des bénévoles ou encore issues de l’INPN et d'autres sources.</p>
+                  <p><a class="btn btn-default" href="{{url_for('main.photos')}}" role="button">Parcourir &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+              </div><!-- /.row -->
+             </div>
+
+              <!-- START THE FEATURETTES -->
+
+             <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 25px; text-align:left; margin-top:20px;">
+                <div class="featurette" id="missions">
+                    
+                    <h2 class="featurette-heading" style="text-align: center;">Patrimoines : de la connaissance à l’action<br/></h2>
+
+			<h3 class="featurette-heading" style="text-align: center;"><span class="text-muted">Biodiversité & géodiversité</span><br/></h3>
+			<hr class="custom">
+			<img class="featurette-image img-circle img-responsive pull-right" src="{{url_for('static', filename='custom/images/10-patrimoine.jpg') }}" style="max-width: 250px;">
+
+                  <p class="lead">
+                    Territoire situé aux confins du Massif armoricain et du Bassin parisien, le {{configuration.STRUCTURE}} présente une situation géographique 
+                    bien spécifique, marquée par son relief caractéristique et des surfaces forestières couvrant près d'un cinquième du territoire. Dans les secteurs les plus escarpés, les crêtes boisées 
+                    partagent l’espace avec les pierriers et les landes. Dans les vallées et la plaine, la forêt laisse place ponctuellement aux tourbières et aux prairies humides, ainsi qu'à de vastes espaces de 
+                    cultures agricoles et d'élevage associés à un bocage ancien localement encore préservé. Ces paysages uniques permettent le développement d’une grande biodiversité, souvent remarquable et parfois rare.
+                  </p>
+                  	<p class="lead" style="padding:0 0 0 20px;">
+				<img class="caractEspece" src="/static/custom/images/logo_patrimonial.png" style="padding-bottom: 12px; width: 25px">
+				<i>En savoir plus sur <a href="https://www.parc-naturel-normandie-maine.fr/le-territoire.html" target="_blank">le territoire du Parc & Géoparc</a>.</i>
+                 	 </p>
+
+			<h3 class="featurette-heading" style="text-align: center;"><span class="text-muted">Connaissance</span><br/></h3>
+			<hr class="custom">
+			<img class="featurette-image img-circle img-responsive pull-right" src="{{url_for('static', filename='custom/images/11-connaissance.jpg') }}" style="max-width: 250px;">
+
+                  <p class="lead">
+                    Le Parc & Géoparc améliore et actualise ses connaissances, notamment sur les sites Natura 2000 et les sites classés en Réserves naturelles régionales. Il réalise des inventaires sur des milieux moins prospectés et met en place une veille sur des espèces cibles dans le cadre de l’élaboration de plans de conservation. 
+                  </p>
+                  <p class="lead">
+                    Le Parc a ciblé des études sur les milieux caractéristiques de son territoire que sont les forêts, les landes, les tourbières, les prairies humides et les cours d’eau. En complément, des approches ont été conduites sur la flore, les oiseaux ou la faune aquatique ainsi que sur les mammifères, les amphibiens, les reptiles et les insectes. 
+                  </p>
+                  <p class="lead">
+                    Depuis 2018, le Parc & Géoparc développe une approche complémentaire d’acquisition de connaissance sur la biodiversité à l'échelle communale dans le cadre de 
+                    la réalisation d'Atlas de la Biodiversité Communale (ABC) : ABC "Andaine-Passais" (2018-2020), ABC "Perseigne" et ABC "Vallée de la Haute Sarthe" (2021-2023), ABC "Source de l'Orne" (2023-2025).
+                  </p>
+                  	<p class="lead" style="padding:0 0 0 20px;">
+				<span class="glyphicon glyphicon-cog"></span><i>En savoir plus sur <a href="/donnees">les données de {{configuration.NOM_APPLICATION}}</a>.</i>
+                 	</p>
+
+			<h3 class="featurette-heading" style="text-align: center;"><span class="text-muted">Actions</span><br/></h3>
+			<hr class="custom">
+			<img class="featurette-image img-circle img-responsive pull-right" src="{{url_for('static', filename='custom/images/12-actions.jpg') }}" style="max-width: 250px;">
+
+                  <p class="lead">
+                    L’acquisition de ces connaissances se traduit en actions concrètes : gestion et animation des sites naturels (Natura 2000, RNR, ENS), travaux de restauration, plans de conservation, etc. 
+                    Les données transmises dans le cadre du SINP fournissent les inventaires nécessaires à l’établissement de l’état de conservation des espèces (listes rouges). Enfin, 
+                    cette expertise naturaliste en faveur de la biodiversité se décline également en actions de communication et de médiation auprès des habitants et des élus, de programmes d’éducation 
+                    à l’environnement, d’ABC, ainsi qu’une inscription dans les documents d’urbanisme et les projets d’aménagement. 
+                  </p>
+
+                  	<p class="lead" style="padding:0 0 0 20px;">
+				<span class="glyphicon glyphicon-cog"></span><i>En savoir plus sur <a href="https://www.parc-naturel-normandie-maine.fr/agir.html" target="_blank">les actions du Parc & Géoparc</a>.</i>
+                 	 </p>
+                </div>
+             </div>
+
+
+             <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 25px; text-align:left; margin-top:20px;">
+              <div class="featurette" id="partenariats">
+                  <h2 class="featurette-heading" style="text-align: center;">Réseau et partenaires<br/>
+			
+			<h3 class="featurette-heading" style="text-align: center;"><span class="text-muted">En relation étroite avec les associations naturalistes</span><br/></h3>
+			<hr class="custom">
+			
+                  </h2>
+
+                  <img class="featurette-image img-circle img-responsive pull-right" src="{{url_for('static', filename='custom/images/13-partenaires.jpg') }}" style="max-width: 250px;">
+
+                  <p class="lead">
+                    Fort de ses missions sur la connaissance et la préservation de la biodiversité, le Parc & Géoparc entretient depuis de nombreuses années des relations étroites avec les associations naturalistes de son territoire.                     
+                  </p>
+                  <p class="lead">
+			Le partenariat entre le Parc & Géoparc et l'Association faune et flore de l'Orne, démarré dès 1986, a notamment permis de poser les bases d’une mutualisation des connaissances dans le cadre d’outils communs, 
+			structurés et partagés. Rejoins dans cette entreprise par le département de l’Orne et le PNR du Perche, l’AFFO et le {{configuration.STRUCTURE}} poursuivent à quatre leur collaboration étroite et 
+			partagent depuis 2020 une base de données commune.
+                  </p>
+                  <p class="lead">
+			Encouragé par cette collaboration fructueuse, le Parc & Géoparc poursuit le développement de partenariats avec les associations naturalistes et 
+			les acteurs de la biodiversité afin d’étendre et de partager les connaissances sur son territoire. 
+                  </p>
+                  <p class="lead" style="padding:0 0 0 20px;">
+                    <span class="glyphicon glyphicon-link"></span><i>En savoir plus sur <a href="partenaires">les partenaires de {{configuration.NOM_APPLICATION}}</a>.</i>
+                  </p>
+              </div>
+             </div>
+
+
+             <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 25px; text-align:left; margin-top:20px;">
+              <div class="row featurette">
+                <div class="col-md-12" id="opensource">
+
+                  <h2 class="featurette-heading" style="text-align: center;">De GeoNature-Atlas à {{configuration.NOM_APPLICATION}}<br/></h2>
+                  <h3 class="featurette-heading" style="text-align: center;"><span class="text-muted">Dans la constellation de l'<i>open source</i></span></h3>
+                  <hr class="custom">
+
+                  <img class="featurette-image img-circle img-responsive pull-right" src="{{url_for('static', filename='custom/images/14-geonature.jpg') }}" style="max-width: 250px;">
+
+                  <p class="lead">
+                    {{configuration.NOM_APPLICATION}} utilise l'outil <a href="https://github.com/PnX-SI/GeoNature-atlas" target="_blank">GeoNature-atlas</a> développé par le <a href="https://www.ecrins-parcnational.fr/" target="_blank">Parc national des Écrins</a>.
+                  </p>
+				  <p class="lead" style="padding:0 0 0 20px;">
+					<span class="glyphicon glyphicon-download"></span> <i>Téléchargez la <a href="https://github.com/PnX-SI/GeoNature-atlas/raw/master/docs/2016-09-GeoNature-atlas-PRESENTATION.pdf">fiche de présentation de GeoNature-atlas</a> pour en savoir plus.</a></i>
+					<br><span class="glyphicon glyphicon-folder-open"></span> <i>Visitez le <a href="https://github.com/pnrnm-sig/BiodivNM" target='_blank'>dossier de {{configuration.NOM_APPLICATION}} sur GitHub</a> pour consulter le code source du portail.</i>
+				  </p>
+                  <p class="lead">
+                    GeoNature-Atlas fait partie de <a href="https://github.com/PnX-SI/GeoNature" target="_blank">GeoNature</a> : un ensemble d'outils publié sous licence libre et développé par le Parc national des Écrins et ses partenaires, dont le {{configuration.STRUCTURE}}, pour pouvoir saisir, gérer et traiter les données d’observations naturalistes en se basant sur les référentiels nationaux de <href="https://inpn.mnhn.fr/" target="_blank">l'INPN</a>.
+                  </p>
+				  <p class="lead" style="padding:0 0 0 20px;">
+				  <span class="glyphicon glyphicon-eye-open"></span><i> En savoir plus sur le <a href="http://geonature.fr" target="_blank">projet GeoNature</a>.</i>
+				  </p>
+                </div>
+              </div>
+             </div>
+
+              <!-- /END THE FEATURETTES -->
+
+            </div>
+        </div>
+
+		{% if configuration.AFFICHAGE_FOOTER %}
+			{% include 'static/custom/templates/footer.html' %}
+		{% endif %}
+
+        <script type="text/javascript">
+        var configuration = {{configuration|tojson}};
+        </script>
+
+        <script src="{{url_for('static', filename='main.js') }}"></script>
+
+   </body>
+</html>

@@ -1,31 +1,23 @@
 # -*- coding:utf-8 -*-
 
-from sqlalchemy import create_engine
-from .configuration.config import database_connection, NOM_APPLICATION
 from sqlalchemy import MetaData
-
+from sqlalchemy import create_engine
 from sqlalchemy.pool import QueuePool
 
-engine = create_engine(
-    database_connection,
-    client_encoding="utf8",
-    echo=False,
-    poolclass=QueuePool,
-    connect_args={"application_name": "GN-atlas_{}".format(NOM_APPLICATION)},
-)
+from flask import current_app
+
+# engine = create_engine(
+#     current_app.config['SQLALCHEMY_DATABASE_URI'],
+#     client_encoding="utf8",
+#     echo=False,
+#     poolclass=QueuePool,
+#     connect_args={"application_name": "GN-atlas_{}".format(current_app.config['NOM_APPLICATION'])},
+# )
 
 
-def loadSession():
-    from sqlalchemy.orm import sessionmaker
-
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    return session
-
-
-def format_number(val):
-    """ Ajouter des espaces en séparateur de milliers """
-    return "{:,}".format(val).replace(",", " ")
+# def format_number(val):
+#     """ Ajouter des espaces en séparateur de milliers """
+#     return "{:,}".format(val).replace(",", " ")
 
 
 SERIALIZERS = {
@@ -40,8 +32,8 @@ SERIALIZERS = {
 
 class GenericTable:
     """
-        Classe permettant de créer à la volée un mapping
-            d'une vue avec la base de données par rétroingénierie
+    Classe permettant de créer à la volée un mapping
+        d'une vue avec la base de données par rétroingénierie
     """
 
     def __init__(self, tableName, schemaName, engine, geometry_field=None, srid=None):
@@ -56,13 +48,8 @@ class GenericTable:
         # Test geometry field
         if geometry_field:
             try:
-                if (
-                    not self.tableDef.columns[geometry_field].type.__class__.__name__
-                    == "Geometry"
-                ):
-                    raise TypeError(
-                        "field {} is not a geometry column".format(geometry_field)
-                    )
+                if not self.tableDef.columns[geometry_field].type.__class__.__name__ == "Geometry":
+                    raise TypeError("field {} is not a geometry column".format(geometry_field))
             except KeyError:
                 raise KeyError("field {} doesn't exists".format(geometry_field))
 
@@ -74,8 +61,8 @@ class GenericTable:
 
     def get_serialized_columns(self, serializers=SERIALIZERS):
         """
-            Return a tuple of serialize_columns, and db_cols
-            from the generic table
+        Return a tuple of serialize_columns, and db_cols
+        from the generic table
         """
         regular_serialize = []
         db_cols = []
@@ -83,9 +70,7 @@ class GenericTable:
             if not db_col.type.__class__.__name__ == "Geometry":
                 serialize_attr = (
                     name,
-                    serializers.get(
-                        db_col.type.__class__.__name__.lower(), lambda x: x
-                    ),
+                    serializers.get(db_col.type.__class__.__name__.lower(), lambda x: x),
                 )
                 regular_serialize.append(serialize_attr)
 

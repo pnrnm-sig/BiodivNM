@@ -1,0 +1,11 @@
+{% block charts %}
+    <div class="card my-4" id="graphBloc">
+        <h4 class="title-bar title-spaced center strong">{{ _('monthly.obs') }}</h4>
+        <div class="chart-container" style="position: relative; height:200px; width:100%">
+            <canvas id="monthChart"></canvas>
+        </div>
+        <p class="small text-justify" style="color:#b1b1b1;margin-left:10px;margin-right:10px;"><b>Avertissement :</b> Les observations sans date 
+            précise peuvent être enregistrées à la date du 01/01. La fréquence des observations au mois de janvier ne reflète donc pas nécessairement 
+            la réalité.</p>
+    </div>
+{% endblock %}

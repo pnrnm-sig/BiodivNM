@@ -1,14 +1,8 @@
 # coding: utf-8
-from sqlalchemy import (
-    Column,
-    Integer,
-    MetaData,
-    String,
-    Table
-)
+from sqlalchemy import Column, Integer, MetaData, String, Table
 from sqlalchemy.ext.declarative import declarative_base
-from ...utils import engine
 
+from atlas.env import db
 
 metadata = MetaData()
 Base = declarative_base()
@@ -23,6 +17,5 @@ class VmSearchTaxon(Base):
         Column("search_name", String),
         schema="atlas",
         autoload=True,
-        autoload_with=engine,
+        autoload_with=db.engine,
     )
-

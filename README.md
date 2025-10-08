@@ -1,9 +1,11 @@
 # GeoNature-atlas-BiodivNM
 Biodiv' Normandie-Maine : https://biodiversite.parc-naturel-normandie-maine.fr/
 
-Installation de GeoNature-atlas par le [PNR Normandie-Maine](https://www.parc-naturel-normandie-maine.fr/).
+Installation et mises à jour de GeoNature-atlas par le [PNR Normandie-Maine](https://www.parc-naturel-normandie-maine.fr/).
 
 Présentation de Biodiv' Normandie-Maine, voir [/docs/BiodivNM_Presentation_202111.pdf](/docs/BiodivNM_Presentation_202111.pdf)
+
+Données issues d'une installation Geonature partagée : 
 
 Atlas ayant servi d'inspiration :
 * https://biodiv-paysdelaloire.fr/
@@ -13,12 +15,29 @@ Atlas ayant servi d'inspiration :
 Voir [/README.rst](/README.rst) la présentation par le PN des Écrins
 Voir repo d'origine : [https://github.com/PnX-SI/GeoNature-atlas](https://github.com/PnX-SI/GeoNature-atlas)
 
-# Personnalisation du style
+# Mise à jour 2024-2025
+Installation version 1.6.1 et corrections à partir du code d'origine.
+
+* nouvelles communes et périmètre parc charte 2024-2039
+* Ajout identifiant GBIF pour les cartes et génération auto des cartes gbif
+* Correction calculs "organismes" (page organisme, page groupe, page liste)
+* Affichage des noms et synonymes
+* Modification de la connexion bd geonature et geonature atlas
+* Correction affichage bouton taxons agrégés
+* Ajout "organismes" aux fonctionnalités dans la page présentation
+* Modification du comportement de la galerie pour affichage plus complet
+* Nouvelles espèces et à voir en ce moment : change avec raffraichissement de la page
+* Anonymisation des observateurs avec champs additionnels de la table utilisateurs.t_roles
+* Remplacement de Google analytics par Matomo
+
+# Installation 2023
+
+## Personnalisation du style
 Modification de certains fichiers CSS et directement dans les modèles de pages html. 
 Sinon, principalement surcharge des styles ou ajout de modèle personnalisé dans [/static/custom/custom.css](/static/custom/custom.css)
 
-# Page accueil
-## Rotation de la photo d'accueil
+## Page accueil
+### Rotation de la photo d'accueil
 Tous les mois, en fonction de 12 photos dans [/static/custom/images/accueil-intro](/static/custom/images/accueil-intro)
 ```
 sudo crontab -e
@@ -41,7 +60,7 @@ sudo crontab -e
 10 2 * * * supervisorctl restart atlas
 ```
 
-## Modification du fonctionnement "à voir en ce moment"
+### Modification du fonctionnement "à voir en ce moment"
 Sélection aléatoire de 12 taxons parmi les 36 les plus observés dans les 15 jours avant/après la date du jour, 
 toutes années confondues. Sélection uniquement des taxons avec une photo.
 
@@ -78,7 +97,7 @@ crontab -e
 */15 * * * * psql -d geonatureatlas -c "REFRESH MATERIALIZED VIEW CONCURRENTLY atlas.vm_taxons_plus_observes;"
 ```
 
-## Modification du fonctionnement limites pour les données et les cartes du territoire
+### Modification du fonctionnement limites pour les données et les cartes du territoire
 Trois types de limites paramétrées dans la configuration de l'atlas : 
 * les limites du PNR pour l'affichage sur les cartes
 * la zone considérée pour récuperer les données de la base GeoNature
@@ -88,24 +107,24 @@ Trois types de limites paramétrées dans la configuration de l'atlas :
 
 Voir modifications dans : [/data/ref](/data/ref) ; [/atlas/configuration/settings.ini](/atlas/configuration/settings.ini) ; [/install_db.sh](/install_db.sh)
 
-# Ajout page "données" et page "partenaires"
+## Ajout page "données" et page "partenaires"
 
 Voir modèle de pages :
 [/static/custom/templates/donnees.html](/static/custom/templates/donnees.html)
 [/static/custom/templates/partenaires.html](/static/custom/templates/partenaires.html)
 
-# Ajouts et/ou modification des pictos
+## Ajouts et/ou modification des pictos
 Voir dans [/static/images/](/static/images/)
 
-# Modifications des attributs des taxons / contenus fiches espèces
+## Modifications des attributs des taxons / contenus fiches espèces
 
-## Ajouts photos INPN, Wikipedias, etc.
+### Ajouts photos INPN, Wikipedias, etc.
 Voir https://github.com/PnX-SI/TaxHub/tree/master/data/scripts
 Scripts adaptés, voir [/data/scripts/Taxhub](/data/scripts/Taxhub)
 
 Import des photos de l'INPN avec un script, + ajouts de photos importées manuellement depuis Wikimédia et GBIF
 
-## Ajout source et licence des photos
+### Ajout source et licence des photos
 Modification sur l'installation de Taxhub du champ 'Auteur' en 'Auteur # licence # source' dans le modèle de page, 
 + tâche cron pour mettre à jour dans la table taxonomie.t_medias les attributs correspondants. Détails ci-dessous.
 
@@ -141,37 +160,37 @@ crontab -e
 0 4 * * * psql -d geonature2db -f /home/pnr/taxhub/data/scripts/pnrnm/update_auteur_t_medias.sql
 ```
 
-## Ajout descriptions INPN
+### Ajout descriptions INPN
 Voir [/data/scripts/Taxhub/descriptions](/data/scripts/Taxhub/descriptions])
 
 Import des descriptions depuis l'API de l'INPN, sur le Taxhub relié à l'Atlas.
 
-## Ajout espèces protégées / espèces patrimoniales
+### Ajout espèces protégées / espèces patrimoniales
 Voir [/data/scripts/Taxhub/protect_patrimo](/data/scripts/Taxhub/protect_patrimo])
 
 Récupération du statut espèce protégée et espèce patrimoniale avec l'API Taxref. Voir scripts pour définitions. + utilisation de la liste des espèces pour Natura2000 [https://inpn.mnhn.fr/site/natura2000/listeEspeces](https://inpn.mnhn.fr/site/natura2000/listeEspeces)
 
-## Ajout des milieux
+### Ajout des milieux
 À partir des habitats associés aux taxons, selectionné dans le taxref, fait une liste des habitats associés ensuite ajoutée comme nouvel attribut
 dans la base de données.
 
-## Suppression de la répartition par classes d'altitudes
+### Suppression de la répartition par classes d'altitudes
 Voir modèle de page [/templates/ficheEspece.html](/templates/ficheEspece.html) et [/static/chart.js](/static/chart.js)
 
-## Cartes
+### Cartes
 
-### Ajout cartes INPN
+#### Ajout cartes INPN
 Voir modèle de page [/templates/ficheEspece.html](/templates/ficheEspece.html)
 ```
 <object data="https://inpn.mnhn.fr/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93" type="image/svg+xml" width="90%" height="90%">
 ```
 
-### Ajout cartes GBIF
+#### Ajout cartes GBIF
 Voir [/data/scripts/gbif](/data/scripts/gbif)
 
 Export des cartes en leaflet avec R, en format html. Possible de le faire directement en javascript depuis FicheEspece.html : évite la nécessité d'une mise à jour mais risque de ralentir le chargement (?). 
 
-## Modification de "observateurs" en "sources"
+### Modification de "observateurs" en "sources"
 Remplace les noms d'observateurs par les noms des sources.
 Voir [/data/atlas.sql](/data/atlas.sql)
 

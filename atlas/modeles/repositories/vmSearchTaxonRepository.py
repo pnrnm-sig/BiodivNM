@@ -1,15 +1,15 @@
 # -*- coding:utf-8 -*-
 from sqlalchemy import desc, func
 
-from ..entities.vmSearchTaxon import VmSearchTaxon
+from atlas.modeles.entities.vmSearchTaxon import VmSearchTaxon
 
 
 def listeTaxons(session):
     """
-        revoie un tableau de dict :
-        label = nom latin et nom francais concatene, value = cd_ref
+    revoie un tableau de dict :
+    label = nom latin et nom francais concatene, value = cd_ref
 
-        TODO Fonction inutile à supprimer !!!
+    TODO Fonction inutile à supprimer !!!
     """
     req = session.query(VmSearchTaxon.search_name, VmSearchTaxon.cd_ref).all()
     taxonList = list()
@@ -21,18 +21,18 @@ def listeTaxons(session):
 
 def listeTaxonsSearch(session, search, limit=50):
     """
-        Recherche dans la VmSearchTaxon en ilike
-        Utilisé pour l'autocomplétion de la recherche de taxon
+    Recherche dans la VmSearchTaxon en ilike
+    Utilisé pour l'autocomplétion de la recherche de taxon
 
-        :query SQLA_Session session
-        :query str search : chaine de charactere pour la recherche
-        :query int limit: limite des résultats
+    :query SQLA_Session session
+    :query str search : chaine de charactere pour la recherche
+    :query int limit: limite des résultats
 
-        **Returns:**
+    **Returns:**
 
-            list: retourne un tableau {'label':'str': 'value': 'int'}
-            label = search_name
-            value = cd_ref
+        list: retourne un tableau {'label':'str': 'value': 'int'}
+        label = search_name
+        value = cd_ref
     """
 
     req = session.query(

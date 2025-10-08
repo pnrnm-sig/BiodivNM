@@ -1,0 +1,116 @@
+{% block blocInfos %}
+{% if configuration.GLOSSAIRE %}
+<!-- Jquery Glossarizer -->
+<script src="{{url_for('static', filename='node_modules/glossarizer/tooltip/tooltip.js') }}"></script>
+<script src="{{url_for('static', filename='node_modules/glossarizer/jquery.glossarize.js') }}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='node_modules/glossarizer/tooltip/tooltip.css') }}">
+{% endif %}
+
+<div class="card mt-4" id="blocInfos">
+    <h4 class="title-bar center">
+        <strong>{{ _('species.infos') }}</strong>
+    </h4>
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#description">{{ _('description') }}</a>
+        </li>
+        {% if taxonDescription.commentaire != None %}
+        <li><a class="nav-link" data-toggle="tab" href="#commentaire">{{ _('read.more') }}</a></li>
+        {% endif %}
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#milieu">{{ _('environment') }}</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#chorologie">{{ _('repartition') }}</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#synonymes">{{ _('synonyms') }}</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#plus"><span class="fa fa-plus"></span></a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="description" class="tab-pane fade show active">
+            {% if taxonDescription.description == None %}
+            {{ _('not.resigned.for.the.moment') }}
+            {% else %}
+            <p class="normal text-justify">{{ taxonDescription.description | safe }}</p>
+            {% endif %}
+        </div>
+        {% if taxonDescription.commentaire != None %}
+        <div id="commentaire" class="tab-pane fade">
+            {{ taxonDescription.commentaire  | safe }}
+        </div>
+        {% endif %}
+        <div id="milieu" class="tab-pane fade">
+            {% if taxonDescription.milieu == None %}
+            {{ _('not.resigned.for.the.moment') }}
+            {% else %}
+            <p class="normal text-justify">{{ taxonDescription.milieu  | safe }}</p>
+            {% endif %}
+        </div>
+        <div id="chorologie" class="tab-pane fade">
+            <!-- carte INPN-->
+            <div class="panel-body">
+                               
+                <h4 class="text-center">Répartition actuelle en France métropolitaine</h4>
+                                                           
+                    <object data="https://inpn.mnhn.fr/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93" type="image/svg+xml" width="90%" height="90%">
+                        <param name="src" value="/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93">
+                        <param name="type" value="image/svg+xml">
+                    </object>
+                    <p class="small text-justify" style="color:#b1b1b1;">&#169; <a href='https://inpn.mnhn.fr/accueil/index' target="_blank" style="color:#7785ce;">INPN</a> - <b>Avertissement :</b> les données visualisables reflètent l'état d'avancement des connaissances et/ou la disponibilité des données existantes au niveau national : elles ne peuvent en aucun cas être considérées comme exhaustives.</p>
+            </div>
+            <!-- carte GBIF-->
+            {% if taxonDescription.chorologie == None %}
+            <!--{{ _('not.resigned.for.the.moment') }}-->
+            {% else %}
+                <h4 class="text-center">Répartition actuelle dans le monde</h4>
+                    <div id="map-gbif"></div>
+                <p class="small text-justify" style="color:#b1b1b1;"><b>Avertissement :</b> les données visualisables reflètent l'état d'avancement des connaissances et/ou la disponibilité des données existantes au niveau mondial : elles ne peuvent en aucun cas être considérées comme exhaustives.</p>
+            {% endif %}
+        </div>
+        <div id="synonymes" class="tab-pane fade">
+            {% if synovern | length <= 1 %}
+            <!--{{ _('no.synonym.for.this.taxon') }}-->
+            {% else %}
+            {% for syn in synovern %}
+            {% if not syn.nom_vern == taxon.taxonSearch.nom_vern %}
+            {{ syn.nom_vern | safe }}
+            {% endif %}
+            {% if ( (not loop.last) and (not syn.nom_vern == taxon.taxonSearch.nom_vern) ) %}
+            |
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% if synonyme | length > 1 %}
+            {% if synovern | length > 1 %}
+            <br><br>
+            {% endif %}
+            {% endif %}
+
+            {% if synonyme | length <= 1 %}
+            {% if synovern | length <= 1 %}
+            {{ _('no.synonym.for.this.taxon') }}
+            {% endif %}
+            {% else %}
+            {% for syn in synonyme %}
+            {% if not syn.lb_nom == taxon.taxonSearch.lb_nom %}
+            {{ syn.nom_complet_html | safe }}
+            {% endif %}
+            {% if ( (not loop.last) and (not syn.lb_nom == taxon.taxonSearch.lb_nom) ) %}
+            |
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+        </div>
+        <div id="plus" class="tab-pane fade">
+                <a href='https://openobs.mnhn.fr/openobs-hub/occurrences/search?taxa={{taxon.taxonSearch.cd_ref}}#tab_mapView' target="_blank">
+                    <img width="90px" src="{{url_for('static', filename='images/logo_openobs.png') }}"  data-toggle="tooltip" data-original-title="Recherche Open-Obs" data-placement="right">
+                 </a>
+                <a href='https://www.gbif.org/species/search?q={{taxon.taxonSearch.lb_nom}}' target="_blank">
+                    <img width="75px" src="{{url_for('static', filename='images/logo_gbif.png') }}"  data-toggle="tooltip" data-original-title="Recherche GBIF" data-placement="right">
+                 </a>
+                 &nbsp;
+                <a href='https://fr.wikipedia.org/w/index.php?search={{taxon.taxonSearch.lb_nom}}' target="_blank">
+                    <img width="30px" src="{{url_for('static', filename='images/logo_wikipedia.png') }}"  data-toggle="tooltip" data-original-title="Recherche Wikipedia" data-placement="right">
+                 </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

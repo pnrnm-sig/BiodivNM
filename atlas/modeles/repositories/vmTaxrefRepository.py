@@ -1,27 +1,28 @@
 # -*- coding:utf-8 -*-
 from flask import current_app
 from sqlalchemy.sql import text
-from .. import utils
-from ..entities.vmTaxref import VmTaxref
-from ..entities.tBibTaxrefRang import TBibTaxrefRang
+
+from atlas.modeles import utils
+from atlas.modeles.entities.tBibTaxrefRang import TBibTaxrefRang
+from atlas.modeles.entities.vmTaxref import VmTaxref
 
 
 def searchEspece(connection, cd_ref):
     """
-        recherche l espece corespondant au cd_nom et tout ces fils
+    recherche l espece corespondant au cd_nom et tout ces fils
     """
     sql = """
     WITH limit_obs AS (
-        select
-            :thiscdref as cd_ref, min(yearmin) AS yearmin,
+        SELECT
+            :thiscdref AS cd_ref, min(yearmin) AS yearmin,
             max(yearmax) AS yearmax, SUM(nb_obs) AS nb_obs
         FROM atlas.vm_taxons
         WHERE
-            cd_ref in (SELECT * FROM atlas.find_all_taxons_childs(:thiscdref))
+            cd_ref IN (SELECT * FROM atlas.find_all_taxons_childs(:thiscdref))
             OR cd_ref = :thiscdref
     )
     SELECT taxref.*,
-        l.cd_ref, l.yearmin, l.yearmax, COALESCE(l.nb_obs, 0) as nb_obs,
+        l.cd_ref, l.yearmin, l.yearmax, COALESCE(l.nb_obs, 0) AS nb_obs,
         t2.patrimonial, t2.protection_stricte
     FROM atlas.vm_taxref taxref
     JOIN limit_obs l
@@ -36,8 +37,8 @@ def searchEspece(connection, cd_ref):
         nom_vern = None
         if r.nom_vern:
             nom_vern = (
-                r.nom_vern.split(",")[0]
-                if current_app.config["SPLIT_NOM_VERN"]
+                r.nom_vern.split(",")[0] 
+                if current_app.config["SPLIT_NOM_VERN"] 
                 else r.nom_vern
             )
         taxonSearch = {
@@ -95,13 +96,46 @@ def getSynonymy(connection, cd_ref):
         SELECT nom_complet_html, lb_nom
         FROM atlas.vm_taxref
         WHERE cd_ref = :thiscdref
-        ORDER BY lb_nom ASC
+        ORDER BY cd_nom = cd_ref DESC, lb_nom ASC;
     """
     req = connection.execute(text(sql), thiscdref=cd_ref)
     tabSyn = list()
     for r in req:
         temp = {"lb_nom": r.lb_nom, "nom_complet_html": r.nom_complet_html}
         tabSyn.append(temp)
+    return tabSyn
+
+def getSynonymyVern(connection, cd_ref):
+    sql = """
+        with selection as 
+		(
+		select
+        cd_nom,
+        cd_ref,
+        unnest(string_to_array(nom_vern,', ')) as nom_vern
+        FROM atlas.vm_taxref
+        WHERE cd_ref = :thiscdref
+        ORDER BY cd_nom = cd_ref desc
+		), sel_order as 
+		(
+		select 
+		*,
+		row_number() over() as idx
+		from selection
+		)	
+		select nom_vern from sel_order 
+		group by nom_vern
+		order by min(idx) asc
+        ;
+    """
+    req = connection.execute(text(sql), thiscdref=cd_ref)
+    tabSyn = list()
+    for r in req:
+        if {"nom_vern": r.nom_vern} in tabSyn:
+            pass
+        else:
+            temp = {"nom_vern": r.nom_vern}
+            tabSyn.append(temp)
     return tabSyn
 
 
@@ -140,10 +174,7 @@ def getAllTaxonomy(session, cd_ref):
     taxonSup = getCd_sup(session, cd_ref)  # cd_taxsup
     taxon = getTaxon(session, taxonSup)
     tabTaxon = list()
-    while (
-        taxon
-        and taxon.tri_rang >= current_app.config["LIMIT_RANG_TAXONOMIQUE_HIERARCHIE"]
-    ):
+    while taxon and taxon.tri_rang >= current_app.config["LIMIT_RANG_TAXONOMIQUE_HIERARCHIE"]:
         temp = {
             "rang": taxon.id_rang,
             "lb_nom": taxon.lb_nom,
@@ -154,3 +185,14 @@ def getAllTaxonomy(session, cd_ref):
         tabTaxon.insert(0, temp)
         taxon = getTaxon(session, taxon.cd_taxsup)  # on avance
     return tabTaxon
+
+
+def get_cd_ref(connection, cd_nom):
+    sql = """
+        SELECT cd_ref
+        FROM atlas.vm_taxref AS t
+        WHERE t.cd_nom = :cdNom
+    """
+    results = connection.execute(text(sql), cdNom=cd_nom)
+    row = results.fetchone()
+    return row.cd_ref

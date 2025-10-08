@@ -1,0 +1,229 @@
+{% extends "templates/core/layout.html" %}
+
+{% block title %}
+Données - FAQ
+{% endblock %}
+
+
+{% block content %}
+<!-- Réalisée à partir de https://startbootstrap.com/template-overviews/one-page-wonder/ et http://getbootstrap.com/examples/carousel/ -->
+   <head>
+        <meta charset="utf-8" />
+        <title>Données - FAQ | {{configuration.NOM_APPLICATION}} </title>
+
+        <!-- Jquery -->
+		<link rel="stylesheet" href="{{url_for('static', filename='node_modules/jquery-ui-dist/jquery-ui.css') }}" />
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="{{url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}"/>
+
+	<!-- custom font Parc -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Amaranth:wght@400;700&family=Dosis:wght@500;700&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
+
+	<!-- CSS Atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/atlas.css') }}" /> <!-- css général atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/staticPages.css') }}" /> <!-- css général pages statiques -->
+        <link rel="stylesheet" href="{{url_for('static', filename='custom/custom.css') }}" /> <!-- css overidde - modif des polices et barre du dessus -->
+
+	<!-- favicon / si ne fonctionne pas, mettre fichiers à la racine /atlas-->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='custom/images/favicon/favicon.ico') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='custom/images/favicon/apple-touch-icon.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='custom/images/favicon/favicon-32x32.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='custom/images/favicon/favicon-16x16.png') }}">
+	<link rel="manifest" href="{{ url_for('static', filename='custom/images/favicon/site.webmanifest') }}">
+	<link rel="mask-icon" href="{{ url_for('static', filename='custom/images/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+	
+	<!-- Matomo -->
+	<script type="text/javascript">
+	  var _paq = window._paq = window._paq || [];
+	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+		var u="https://www.parc-naturel-normandie-maine.fr/matomo/";
+		_paq.push(['setTrackerUrl', u+'matomo.php']);
+		_paq.push(['setSiteId', '4']);
+		var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+		g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<!-- End Matomo Code -->
+   </head>
+   
+   <body  data-spy="scroll" data-target="#sommaire">
+		<div class="container-fluid" id="page">
+            
+            
+            <!-- Carousel
+            ================================================== -->
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active" >
+					<img src="{{url_for('static', filename='custom/images/00-donnees.jpg') }}" style="margin-top:0px"/>
+					<div class="container">
+                    <div class="carousel-caption">
+                      <h1>FAQ - Données de {{configuration.NOM_APPLICATION}}</h1>
+                      <p>Les réponses à vos questions sur les données naturalistes du {{configuration.STRUCTURE}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.carousel -->
+
+           <div class="container presentation" style="margin-bottom: 20px;">
+              <div class="col-lg-8">
+              </div>
+              <div style="clear: both;"></div>
+
+              <!-- START THE FEATURETTES -->
+                <!-- FAQ -->		
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; margin-top:10px; padding: 25px; text-align:left;">
+  
+                <details>
+                  <summary>D’où viennent ces données ?</summary>
+                  <div class="faq__content">
+			<p>
+			Les données sont issues de sources multiples : observations effectuées directement par les agents du {{configuration.STRUCTURE}} dans le cadre de leurs missions 
+			ou transmises par des habitants, données partagées par des partenaires ou produites par des prestataires lors d’études.
+			En grande partie, ces données sont produites par des structures publiques ou par des associations naturalistes financées dans le cadre de projet avec des financements publics.
+			</p>
+			<p>
+			En savoir plus sur les fournisseurs et producteurs de données <a href="partenaires" target='_blank'>sur la page partenaires<span class='glyphicon glyphicon-link'></span></a> et dans l'onglet "source" des fiches espèces.
+			</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>Qu’est-ce qu’une donnée naturaliste ?</summary>
+                  <div class="faq__content">
+			<p>
+                	Les données présentées sur {{configuration.NOM_APPLICATION}} sont des observations de présences d’espèce, localisées et datées. 
+                	Elles sont saisies à l’aide de <a href="https://geonature.fr/" target='_blank'>GeoNature</a>,  un ensemble d'outils développés par les parcs nationaux de 
+                	France, disponibles sous licence libre et basé sur les référentiels du <a href="https://inpn.mnhn.fr/informations/sinp/presentation" target='_blank'>SINP</a>.
+                	</p>
+			<p>
+			Approfondissez en consultant les définitions du <a href="https://inpn.mnhn.fr/informations/glossaire" target="_blank">glossaire de l'INPN<span class='glyphicon glyphicon-book'></span></a>.
+			</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>Quelles sont les communes consultables ?</summary>
+                  <div class="faq__content">
+			<p>
+			Les 148 communes et villes portes présentées sur {{configuration.NOM_APPLICATION}} correspondent au territoire du {{configuration.STRUCTURE}}. 
+			</p>
+			<p>
+			En savoir plus <a href="https://www.parc-naturel-normandie-maine.fr/territoire.html" target='_blank'>sur le territoire du Parc & Géoparc<span class='glyphicon glyphicon-map-marker'></span></a>.
+			</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>À quoi servent ces données ?</summary>
+                  <div class="faq__content">
+                  	<p>
+                  	Ces données sont utiles au {{configuration.STRUCTURE}} dans ses <a href="presentation#missions">missions de connaissance et de protection du patrimoine naturel</a>. 
+			Elles sont diffusées dans le cadre du <a href="https://inpn.mnhn.fr/informations/sinp/presentation" target='_blank'>SINP</a> et participent à la 
+			protection locale, régionale, nationale et internationale de la biodiversité, enjeu pour lequel le Parc s’engage dans 
+			<a href='https://www.parc-naturel-normandie-maine.fr/le-projet-de-charte-redaction.html' target ='_blank'>sa nouvelle charte</a>.
+                  	</p>
+                  	<p>
+                  	Besoin d’expertise en données naturalistes sur le territoire du {{configuration.STRUCTURE}} ? 
+			<a href='https://www.parc-naturel-normandie-maine.fr/contact.html' target='_blank'>Nous écrire<span class='glyphicon glyphicon-envelope'></span></a>. 
+                  	</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>Comment bien interpréter ces données ?</summary>
+                  <div class="faq__content">
+                  	<p>
+                  	Les données permettent de dresser des inventaires de présence et de connaître la première et la dernière observation connue d’une espèce. 
+			Ces informations peuvent être croisées avec les statuts d’espèces et permettent d’évaluer l’état de la biodiversité. 
+			Attention toutefois aux biais qui pourraient conduire à de fausses analyses !
+                  	</p>
+                  	<p>
+                  	En effet, il est important de rappeler que les données présentées correspondent à une représentation des connaissances à l'instant T. 
+			Par exemple, la répartition d’une espèce peut indiquer soit une réelle absence soit simplement qu’aucune information n’est connue dans cette zone à ce jour. 
+			En outre, les données sont issues de différents protocoles de collectes, donc les dénombrements d’observations correspondent plutôt à la pression d’observation qu'aux effectifs réels. 
+                  	</p>
+                  	<p>
+                  	Par ailleurs, les localisations ou les dates ne sont pas toujours précises (observation à l’échelle d’une commune et date inconnue ou peu pertinente par exemple).                  	</p>
+                  	<p>
+                  	Enfin, toutes les données ne sont pas diffusables publiquement du fait de leur 
+			<a href='https://inpn.mnhn.fr/programme/donnees-observations-especes/references/sensibilite' target='_blank'>sensibilité</a> : 
+			espèces rares protégées, animaux juvéniles ou encore nids 
+			ne sont ainsi pas diffusés. C’est pourquoi les localisations sont agrégées à l’échelle des 
+			<a href='https://inpn.mnhn.fr/telechargement/cartes-et-information-geographique' target='_blank'>carreaux INPN de 5 km</a>.
+                  	</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>Est-il possible de télécharger les données ?</summary>
+                  <div class="faq__content">
+                  	<p>
+                  	Le {{configuration.STRUCTURE}} transfère ses données dans le cadre du <a href="https://inpn.mnhn.fr/informations/sinp/presentation" target='_blank'>SINP</a>. 
+			Il est possible de télécharger les données : auprès des SINP régionaux, 
+			<a href='https://odin.normandie.fr' target='_blank'>ODIN</a> en Normandie et 
+			<a href='https://biodiv-paysdelaloire.fr/' target='_blank'>Biodiv’ Pdl [en cours]</a> en Pays de la Loire ; 
+                  	au niveau national sur la plateforme <a href='https://openobs.mnhn.fr/' target='_blank'>Open Obs</a> ; 
+			et enfin à l’échelle internationale sur le site du <a href='https://www.gbif.org/dataset/search' target='_blank'>GBIF</a>.
+                  	</p>
+                  	<p>
+                  	Pour en savoir plus sur l'accès aux données du Parc & Géoparc, vous pouvez 
+                  	<a href='https://www.parc-naturel-normandie-maine.fr/contact.html' target='_blank'>nous écrire<span class='glyphicon glyphicon-envelope'></span></a>.
+                  	</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>Est-il possible de contribuer ?</summary>
+                  <div class="faq__content">
+			<p>
+                	Vous souhaitez transmettre directement au {{configuration.STRUCTURE}} une observation ou une photographie ? Vous pouvez <a href='https://www.parc-naturel-normandie-maine.fr/contact.html' target='_blank'>nous écrire <span class='glyphicon glyphicon-envelope'></span>.</a>
+                	</p>
+                	<p>
+                	Chacun peut également devenir contributeur de la connaissance sur la biodiversité en transmettant ses observations de plantes, insectes, mammifères, oiseaux ou encore reptiles, sur les différentes plateformes 
+                  	naturalistes et/ou en devenant membre des associations naturalistes du territoire. 
+                  	<a href="partenaires" target='_blank'>Voir nos partenaires<span class='glyphicon glyphicon-link'></span></a> pour en savoir plus.
+                	</p>
+                  </div>
+                </details>
+                <hr class="custom">
+
+                <details>
+                  <summary>Encore une question sans réponse ?</summary>
+                  <div class="faq__content">
+                    <p>Vous pouvez <a href='https://www.parc-naturel-normandie-maine.fr/contact.html' target='_blank'>nous écrire<span class='glyphicon glyphicon-envelope'></span></a>.</p>
+                  </div>
+                </details>  
+
+              <!-- /END THE FEATURETTES -->             
+     
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        var configuration = {{configuration|tojson}};
+        </script>
+    <script type=text/javascript src="{{url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='node_modules/jquery-lazy/jquery.lazy.min.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{url_for('static', filename='main.js') }}"></script>
+
+   </body>
+
+{% endblock %}

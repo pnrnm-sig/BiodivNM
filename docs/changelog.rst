@@ -2,6 +2,197 @@
 CHANGELOG
 =========
 
+1.6.1 (2023-10-16)
+------------------
+
+🚀 **Nouveautés**
+
+- Possibilité de surcoucher les fichiers du dossier ``static`` en les plaçant avec le même nom dans le dossier ``custom`` (#496)
+
+  - Par exemple pour surcoucher le pictogrammes des mammifères, mettre le votre dans ``custom/images/picto/Mammiferes.png``
+- Possibilité de customiser le fichier ``navbar.html`` (déplacé dans le dossier ``static/custom/templates``) (#496)
+- Ajout d'un linter pour le code python (``black``)
+
+⚠️ **Notes de version**
+
+- Si l'application n'est pas à la racine du serveur (par exemple avec ``/atlas``), la configuration Apache est à modifier et devient :
+  ::
+    <Location /atlas>
+        ProxyPass  http://127.0.0.1:8080/atlas
+        ProxyPassReverse  http://127.0.0.1:8080/atlas
+    </Location>
+
+- Copier le fichier ``navbar.html`` dans le dossier ``atlas/static/custom/templates/`` :
+  ::
+    cp atlas/static/custom/templates/navbar.html.sample atlas/static/custom/templates/navbar.html
+
+
+1.6.0 (2023-09-15)
+------------------
+
+🚀 **Nouveautés**
+
+- Ajout du paramètre ``DISPLAY_OBSERVERS`` permettant de masquer les observateurs des fiches espèces (#439 par @mvergez)
+- [Docker] Ajout d'un fichier ``Dockerfile`` permettant de dockeriser GeoNature-atlas (#470)
+- [Docker] Ajout d'une Github action publiant automatiquement les images Docker de GeoNature-atlas
+- [Docker] Ajout des scripts ``docker_startup.sh`` et ``docker_install_atlas_schema.sh`` (sera exécuté au démarrage du container si la variable d'environnement ``ATLAS_INSTALL_SCHEMA`` est à  ``true``) (#470)
+- Possibilité de définir le chemin vers le fichier de config avec ``ATLAS_SETTINGS`` (par défaut ``atlas/configuration/config.py``) (#470)
+- Possibilité de définir le chemin vers le dossier des templates avec ``ATLAS_TEMPLATE_FOLDER`` (par défaut ``.``) (#470)
+- Possibilité de définir le chemin vers le dossier des templates avec ``ATLAS_STATIC_FOLDER`` (par défaut ``atlas/static``) (#470)
+- Gestion du proxy avec ``ProxyFix`` (#470)
+- Mise à jour de Flask en version 2 et de nombreuses dépendances Python (#470)
+
+🐛 **Corrections**
+
+- Corrections linguistiques (#383 par @Splendens)
+- Correction d'une traduction (#433 par @mvergez)
+- Harmonisation et correction des fiches organismes (#382, #384 par @Splendens)
+- Correction de l'affichage des pictos des groupes 2 INPN quand leur nom contient un accent (#380 par @Splendens)
+- Amélioration de l'affichage des logos des organismes sur la page d'accueil (#381 par @Splendens)
+- Affichage de lb_nom en italique (#387 par @Splendens)
+- Affichage HTML du titre du média principal dans les fiches espèce (#420 par @joelclems)
+- Correction du scroll infini de la galerie photo (#430 par @mvergez)
+- Correction des liens vers les fiches espèces dans la galerie photo
+- Correction du lien vers les fiches espèces dans la galerie photo (#459 par @jpm-cbna)
+- Correction du bouton de tri (aléatoire ou nombre d'observation) dans la galerie photo
+- Amélioration du lien vers la fiche d'un taxon depuis la galerie photo (#432 par @mvergez)
+- Correction de l'affichage de la liste des taxons sur les fiches communes (#445 par @mvergez)
+- Prise en compte des cas où le SRID est différent de 2154 lors de la création de ``atlas.t_mailles_territoire`` (#417 par @joelclems)
+- Harmonisation de l'affichage du picto group2_inpn (#424, #425, #426, #427, #429 par @MissT)
+- Affichage en double de la légende quand le slider était manipulé (#452 par @mvergez)
+- Exclusion des médias supprimés dans la vue ``vm_medias`` (#458 par @jpm-cbna)
+- Spécification du port de base de données dans le script ``install_db.sh`` (#422 par @geobrun)
+- Correction des photos lors du scroll dans les fiches des communes (#448 par @mvergez)
+- Affichage cartographique sur la page "Recherche avancée" (#486)
+- Support des cd_ref négatifs
+
+🐛 **Optimisations**
+
+- Optimisation de la requête de sélection des "Nouvelles espèces observées" (#455 par @andriacap)
+- Mise en cache des statistiques de la page d'accueil (#400 par @TheoLechemia)
+- Optimisation et ajout d'index sur la vue ``atlas.vm_cor_taxon_organism`` (#463 par @jpm-cbna)
+- Redirection des URL des fiches espèces des synonymes vers les noms de référence (#388 par @jpm-cbna)
+- Suppression des requêtes inutiles sur la page d'accueil (#275 par @jpm-cbna)
+- Nettoyage et optimisation du code (#395, #407, #396, #394 par @jpm-cbna)
+- Ajout du paramètre permettant de recharger automatiquement les templates (#431 par @mvergez)
+
+⚠️ **Notes de version**
+
+Si vous mettez à jour GeoNature-atlas :
+
+- Exécutez le script SQL de mise à jour de la BDD : https://github.com/PnX-SI/GeoNature-atlas/blob/master/data/update/update_1.5.2to1.6.0.sql
+- Dans le fichier de configuration ``config.py``, changez le nom du paramètre ``database_connection`` en ``SQLALCHEMY_DATABASE_URI``
+- Si vous utilisiez le paramètre ``ANONYMIZE``, celui-ci est à remplacer par ``ORGANISM_MODULE`` et ``DISPLAY_OBSERVERS`` qui permettent d'afficher ou non indépendamment les organismes et les observateurs
+- Suivez la procédure classique de mise à jour de l'application
+
+1.5.1 (2021-12-06)
+------------------
+
+🐛 **Corrections**
+
+- Ajout de l'utilisation de ``nvm`` dans le script ``install_app.sh`` (par @gildeluermoz)
+- Nettoyage de la documentation (par @gildeluermoz)
+- Mise à jour de la version du schéma ``taxonomie`` pour une installation sans GeoNature (par @gildeluermoz)
+
+⚠️ **Notes de version**
+
+Si vous mettez à jour GeoNature-atlas :
+
+- Vous pouvez passer directement à cette version, mais en suivant les notes de versions intermédiaires
+- Télécharger et installer ``nvm`` :
+
+::
+
+    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+- Suivez la procédure classique de mise à jour de l'application.
+
+1.5.0 (2021-12-02)
+------------------
+
+🚀 **Nouveautés**
+
+**1. Affichage des organismes (#291 par @corentinlange)**
+
+- Affichage des organismes activable avec le paramètre ``ORGANISM_MODULE`` (désactivé par défaut) (#325)
+- Affichage des organismes ayant fourni des données d'une espèce dans la fiche espèce (#315)
+- Intégration du bandeau organisme sur la page d'accueil (#245 par @Splendens)
+- Création de fiches organismes, avec logo, nom, nombre de données, espèces les plus observées et familles de taxons observés par un organisme (#291)
+
+**2. Multilingue (#175 par @TheMagicia et @corentinlange)**
+
+- Mise en place du multilingue (activable avec le paramètre ``MULTILINGUAL``) avec les fichiers de langue de traduction de l'interface en français, anglais et italien
+- Langue détectée automatiquement en fonction de la langue du navigateur
+- Possibilité pour l'utilisateur de basculer sur une autre langue disponible
+- Optimisation du multilingue pour le référencement par les moteurs de recherche
+- Redirection automatique des URL sans clé de langue pour le référencement et les anciennes URL
+- Documentation (``docs/multilingual.rst``)
+
+**3. Bootstrap 4 (#233 par @lpofredc)**
+
+- Mise à jour de Bootstrap version 3 à 4 (#230)
+- Remplacement de la police d'icônes Glyphicon par Font Awesome
+- Correction de l'absence de la hiérarchie sur les fiches taxons
+- Restructuration des templates (avec ``includes`` & ``blocks``) et mutualisation des parties partagées
+- Refonte de la page commune, notamment en fixant la carte et en ne scrollant que dans la liste (#79)
+- Remplacement de la librairie des graphiques morris/D3 par chart.js (#164)
+- Ajout d'un fichier ``sitemap.xml`` à la racine de l'application, autogénéré pour optimiser le référencement par les moteurs de recherche (#44)
+- Ajout d'un fichier ``robots.txt`` à la racine de l'application, à partir d'un template customisable, pour indiquer aux moteurs de recherche les pages qu'ils peuvent indexer ou non (#223)
+- Utilisation des zonages activés uniquement dans le ``ref_geo`` (``enable = true``)
+- Possibilité de customiser en CSS la couleur des contours des objets sur les cartes (mailles, territoire, zonages)
+- Corrections de la hiérarchie taxonomique
+- Possibilité de masquer les observateurs avec le nouveau paramètre ``ANONYMIZE``
+- Possibilité que les liens dans le menu latéral soient des liens externes (en remplacant la clé ``template`` par la clé ``url`` au niveau du paramètre ``STATIC_PAGES``)
+
+**4. Nouvelles espèces**
+
+- Ajout d'un bloc "Nouvelles espèces observées" sur la page d'accueil, permettant d'afficher les dernières espèces découvertes (première observation d'une espèce) sur le territoire (#85 par @MathildeLeclerc)
+
+**5. Autres**
+
+- Possibilité d'afficher l'echelle sur la carte avec le paramètre ``ENABLE_SCALE`` (#293 par @mvergez)
+- Possibilité d'ajouter un masque sur la carte en dehors du territoire avec le paramètre ``MASK_STYLE`` (#89 par @mvergez)
+- Ajout de pictos manquants (#272 par @jpm-cbna)
+
+**6. Développement**
+
+- Support de Debian 11
+- Installation découpée (#332 et #349 par @corentinlange)
+- Mise en place de npm pour installer les dépendances (#310 par @corentinlange)
+- Mise en place de la structure de tests Backend (avec Pytest) et Frontend (avec Jest) (#297 et #316)
+- Remplacement de ``supervisor`` par ``systemd``
+- Ajout d'un paramètre de définition du timeout de gunicorn (#271 par @jpm-cbna)
+- Mise à jour des dépendances
+- Réorganisation du code et packaging
+- Ajout d'une page de recherche avancée, permettant d'afficher les observations par maille de 3 espèces en même temps, à tester et finaliser (#313 par @lpofredc)
+- Ajout de la possibilité de proposer d'autres types de zonages que les communes, à tester, génériciser et finaliser (#209 par @lpofredc)
+
+🐛 **Corrections**
+
+- Retrait des ``-n`` dans le fichier d'installation (#306 par @corentinlange)
+- Correction de l'API ``searchCommune`` en fermant les sessions DB (#277 par @jpm-cbna)
+
+⚠️ **Notes de version**
+
+Si vous mettez à jour GeoNature-atlas :
+
+- Stopper le service ``atlas`` de supervisor (``sudo supervisorctl stop atlas``). Supprimez également le fichier de configuration supervisor de l'atlas (``sudo supervisorctl remove atlas && sudo rm /etc/supervisor/conf.d/atlas-service.conf && sudo supervisorctl reread``)
+- Ajouter la variable ``SECRET_KEY`` au fichier ``config.py`` (utilisée pour chiffrer la session), et remplissez-la avec une chaine de texte aléatoire.
+- Relancer l'installation complète de la BDD car de nombreux éléments ont évolué, en lancant le script ``install_db.sh``, après avoir passé le paramètre ``drop_apps_db`` à ``true`` dans le fichier ``settings.ini``. Cela va complètement supprimer et recréer votre BDD de GeoNature-atlas. Si vous aviez modifié la vue ``synthese.syntheseff`` ou des vues matérialisées, vous devrez reporter ces modifications après la réinstallation de la BDD de GeoNature-atlas.
+
+  Si votre GeoNature-atlas est connecté à une BDD GeoNature distante, vous devez au préalable étendre les droits de lecture de l'utilisateur PostgreSQL utilisé pour lire les données au niveau de cette BDD GeoNature source (https://github.com/PnX-SI/GeoNature-atlas/blob/master/atlas/configuration/settings.ini.sample#L65) :
+
+  ::
+
+      GRANT USAGE ON SCHEMA utilisateurs, gn_meta TO geonatatlas;
+      GRANT SELECT ON ALL TABLES IN SCHEMA utilisateurs, gn_meta TO geonatatlas;
+
+- Suivez la procédure classique de mise à jour de l'application.
+- Le nom du service systemd est désormais ``geonature-atlas``
+- Les logs sont désormais dans ``/var/log/geonature-atlas.log``. Vous pouvez supprimer le répertoire ``log`` à la racine de l'atlas qui est obsolète.
+
 1.4.2 (2020-11-25)
 ------------------
 
@@ -20,6 +211,7 @@ CHANGELOG
 **⚠️ Notes de version**
 
 * Si vous mettez à jour l'application, exécutez le script SQL de mise à jour de la BDD : https://github.com/PnX-SI/GeoNature-atlas/blob/master/data/update_1.4.1to1.4.2.sql
+* Si vous disposiez d'un GeoNature de version inférieure à 2.5 et que vous passez à cette version, adaptez la table étrangère : ``ALTER FOREIGN TABLE synthese.synthese DROP id_nomenclature_obs_meth;``
 * Suivez la procédure classique de mise à jour : https://github.com/PnX-SI/GeoNature-atlas/blob/master/docs/installation.rst#mise-%C3%A0-jour-de-lapplication
 
 1.4.1 (2019-10-09)
@@ -48,7 +240,7 @@ CHANGELOG
 * Compatible avec GeoNature version 2 et connexion possible au réferentiel géographique (#162)
 * Fiches espèce : les mailles ne sont plus dupliquées pour améliorer les performances (#53)
 * Passage à Python 3 (par @aroche)
-* Prise en compte de la dégradation des données (centroïde de la géométrie dégradée) de GeoNature, basé sur les niveaux de diffusion du SINP (voir http://standards-sinp.mnhn.fr/nomenclature/5-niveaux-de-precision-de-diffusion-souhaites-niveauprecision-23-06-2016/) 
+* Prise en compte de la dégradation des données (centroïde de la géométrie dégradée) de GeoNature, basé sur les niveaux de diffusion du SINP (voir http://standards-sinp.mnhn.fr/nomenclature/5-niveaux-de-precision-de-diffusion-souhaites-niveauprecision-23-06-2016/)
 * Amélioration du module de recherche de taxons (AJAX + trigrammes) (par @aroche)
 * Amélioration du module de recherche de commune (AJAX) (par @aroche)
 * Chargement "paresseux" des images dans les listes de taxons et la page d'accueil (par @aroche)
@@ -76,7 +268,7 @@ CHANGELOG
 
 **⚠️ Notes de version**
 
-Si vous souhaitez connecter l'atlas à GeoNature 2, préferez une nouvelle installation de GeoNature-atlas 1.4.0, plutôt qu'une migration. 
+Si vous souhaitez connecter l'atlas à GeoNature 2, préferez une nouvelle installation de GeoNature-atlas 1.4.0, plutôt qu'une migration.
 
 Dans le cas contraire, suivez les instructions suivantes :
 
@@ -97,7 +289,7 @@ Lancer le script de migration update_1.3.2to1.4.0.sql (https://github.com/PnX-SI
     --main-color: #82c91e;
     --second-color: #649b18;
   }
-  
+
 Suivez ensuite les instructions suivantes :
 
 * Télécharger puis dézipper la nouvelle version de l'atlas.
@@ -106,7 +298,7 @@ Suivez ensuite les instructions suivantes :
 
     cd /home/`whoami`
     wget https://github.com/PnX-SI/GeoNature-atlas/archive/X.Y.Z.zip
-    unzip X.Y.Z 
+    unzip X.Y.Z
     rm X.Y.Z
 
 * Renommer l'ancienne version de l'atlas puis la nouvelle version.
@@ -234,7 +426,7 @@ Mettre à jour la configuration Apache de votre GeoNature-atlas (``/etc/apache2/
         ProxyPassReverse  http://127.0.0.1:8080/
     </Location>
     #FIN Configuration Geonature-atlas
-    
+
 * Reportez les modifications du template ``static/custom/templates/introduction.html`` en répercutant la nouvelle méthode d'obtention des templates des pages statiques : https://github.com/PnEcrins/GeoNature-atlas/blob/6d8781204ac291f11305cf462fb0c9e247f3ba59/static/custom/templates/introduction.html.sample#L15
 
 * Modifier votre template ``static/custom/templates/presentation.html`` en répercutant la modification du nom du fichier CSS des pages statiques : https://github.com/PnEcrins/GeoNature-atlas/blob/6d8781204ac291f11305cf462fb0c9e247f3ba59/static/custom/templates/presentation.html.sample#L20
@@ -271,7 +463,7 @@ Mettre à jour la configuration Apache de votre GeoNature-atlas (``/etc/apache2/
 **Nouveautés**
 
 * Compatibilité avec GeoNature 1.9.0 (multiprojection)
-* Ajout du script SQL ``data/update_vm_observations.sql``, permettant de faciliter la mise à jour de la vue ``atlas.vm_observations`` 
+* Ajout du script SQL ``data/update_vm_observations.sql``, permettant de faciliter la mise à jour de la vue ``atlas.vm_observations``
 
 **Notes de version**
 
@@ -287,7 +479,7 @@ Si vous utilisez l'atlas sans GeoNature, cette mise à jour n'est pas nécessair
 **Nouveautés**
 
 * Améliorations de la documentation
-* Ajout d'un champs ``diffusable`` (oui/non) dans la synthese de GeoNature, utilisable pour ne pas afficher les données sensibles dans l'atlas au moment de la création de la VM des observations. 
+* Ajout d'un champs ``diffusable`` (oui/non) dans la synthese de GeoNature, utilisable pour ne pas afficher les données sensibles dans l'atlas au moment de la création de la VM des observations.
 
 **Notes de version**
 
@@ -300,7 +492,7 @@ Si vous utilisez l'atlas sans GeoNature, cette mise à jour n'est pas nécessair
 
 **Améliorations**
 
-* Simplification des utilisateurs PostgreSQL et suppression du besoin d'un utilisateur super utilisateur. 
+* Simplification des utilisateurs PostgreSQL et suppression du besoin d'un utilisateur super utilisateur.
 * Correction des tooltips qui ne fonctionnaient plus sur les pages suivantes dans les listes paginées
 * Amélioration de la gestion des médias et possibilité de cacher l'URL hébergeant les médias.
 * Correction de la création de ``atlas.vm_altitudes``

@@ -1,0 +1,27 @@
+{% block identityCard %}
+	<div class="card mt-4" id="identityCard">
+		<div class=" card-body row" id="rowIdentity">
+			<!-- Logo -->
+			{% if url_logo != none %}
+			<div class="imgWrapper left"  style="margin: auto;">
+				{% if url_organism|length > 9 %}
+				<a href="{{ url_organism }}" target="_blank">
+					<img id="mainImg" src='{{ url_logo }}' style="width: 200px; margin: auto;">
+				</a>
+				{% else %}
+					<img id="mainImg" src='{{ url_logo }}' style="width: 200px;">
+				{% endif %}
+			</div>
+			{% endif %}
+			<div class="left col-9  ">
+			<h1>
+				<strong>{{ nom_organism }}</strong>
+			</h1>
+				<br><b>{{ _('Adresse') }}</b> : {{ adresse_organism}}, {{ cp_organism }} {{ ville_organism }}
+				<br><b>{{ _('Téléphone') }}</b> : {{ tel_organism }}
+				<br><b>{{ _('Email') }}</b> : {{ email_organism }}
+				<br><b>{{ _('Site') }}</b> : <a href="{{ url_organism }}" target="_blank">{{ url_organism }}</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

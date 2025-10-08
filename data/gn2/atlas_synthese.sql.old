@@ -1,3 +1,76 @@
+-- MODIF PNRNM
+-- ajout de champs : précision et validation
+-- ajout champ info_geom_point en lien avec modif the_geom_point
+-- modif de the_geom_point pour prendre en compte
+-- modification de la sélection pour exclure données sensible sans diff (si mauvais lien avec champ diff)  => OR s.id_nomenclature_sensitivity = 71
+-- ajouts des vues pour anonymiser ou pas les noms diffusés
+
+--
+
+-- Création de vue pour anonymiser ou pas les noms en fonction des producteurs / diffuseurs
+-- et si l'info d'anonymisation est connue dans la table t_roles
+CREATE VIEW synthese.diff_observers AS
+with role_anonym as (
+	select distinct 
+	concat(tr.nom_role,' ', tr.prenom_role) as nom,
+	case
+		when tr.champs_addi->>'anonym'='["false"]' then False
+		else True
+	end as anonym
+	from utilisateurs.t_roles tr
+),
+-- est-ce que l'organisme fait partie de ceux que nous gérons ? (fournisseur et producteur)
+obs_orga_anonym as (
+	select distinct s.id_synthese
+	from synthese.synthese s
+	left join gn_meta.cor_dataset_actor cda on cda.id_dataset = s.id_dataset 
+	where id_organism in (2,3,100,1000017) and id_nomenclature_actor_role in (370, 369)
+), 
+-- est-ce qu'on est producteur du jdd ?
+obs_producteur_anonym as (
+	select distinct s.id_synthese
+	from synthese.synthese s
+	left join gn_meta.cor_dataset_actor cda on cda.id_dataset = s.id_dataset 
+	where id_organism in (2,3,100,1000017) and id_nomenclature_actor_role in (370)
+),
+-- est-ce que jdd de données déjà publiques ?
+jdd_publiqu as (
+	select distinct s.id_synthese
+	from synthese.synthese s
+	left join gn_meta.t_datasets td on td.id_dataset = s.id_dataset
+	where td.id_acquisition_framework = 27
+),
+-- tous les noms indiqués
+listenom as (
+select 
+	s.id_synthese,
+	s.id_dataset,
+	unnest(string_to_array(s.observers,', ')) as nom
+from synthese.synthese s
+),
+anonymisation as (
+select
+	ln.id_synthese,
+	case 
+		when jdp.id_synthese is not null then ln.nom -- données déjà publiques => NOMS
+		when ooa.id_synthese is null and ra.anonym is False then ln.nom -- pas nos données mais nom à désanonymiser => NOMS
+		when ooa.id_synthese is not null and ra.anonym is False then ln.nom -- nos données et nom à désanonymiser => NOMS
+		when ooa.id_synthese is not null and opa.id_synthese is null and ra.nom is null then ln.nom -- nos données mais pas producteur et pas nom connu => NOMS
+		else 'Anonymisé' -- sinon anonymisé par défaut => ANONYMES
+	end as nom
+from listenom ln
+left join role_anonym ra on ln.nom = ra.nom
+left join obs_orga_anonym ooa on ooa.id_synthese = ln.id_synthese
+left join obs_producteur_anonym opa on opa.id_synthese = ln.id_synthese
+left join jdd_publiqu jdp on jdp.id_synthese = ln.id_synthese
+)
+select 
+	a.id_synthese,
+	string_agg(a.nom,', ') as observers
+from anonymisation a
+group by a.id_synthese
+;
+
 -- Creation d'une vue permettant de reproduire le contenu de la table du même nom dans les versions précédentes
 
 CREATE VIEW synthese.syntheseff AS
@@ -6,7 +79,7 @@ WITH areas AS (
           sa.id_synthese, 
           sa.id_area, 
           a.centroid, 
-          st_transform(centroid, 3857) as centroid_3857, 
+          st_transform(centroid, 4326) as centroid_4326, 
           t.type_code
 	FROM synthese.cor_area_synthese sa
 	JOIN ref_geo.l_areas a ON sa.id_area = a.id_area
@@ -15,27 +88,58 @@ WITH areas AS (
  ),  obs_data AS (
 	SELECT s.id_synthese,
 	    s.cd_nom,
-	    s.date_min AS dateobs,
-	    s.observers AS observateurs,
+		s.id_dataset,
+	    date(s.date_min) AS dateobs,
+	    do2.observers AS observateurs,
 	    (s.altitude_min + s.altitude_max) / 2 AS altitude_retenue,
+	    -- début MODIF 1 PNRNM
 	    CASE
-		WHEN dl.cd_nomenclature = '1' THEN
-			(SELECT centroid_3857 FROM areas a WHERE a.id_synthese = s.id_synthese AND type_code = 'COM' LIMIT 1)
-		WHEN dl.cd_nomenclature = '2' THEN
-			(SELECT centroid_3857 FROM areas a WHERE a.id_synthese = s.id_synthese AND type_code = 'M10' LIMIT 1)
-		WHEN dl.cd_nomenclature = '3' THEN
-			(SELECT centroid_3857 FROM areas a WHERE a.id_synthese = s.id_synthese AND type_code = 'DEP' LIMIT 1)
-		ELSE st_transform(s.the_geom_point, 3857)
+		-- donnees precises
+		WHEN (s.id_nomenclature_diffusion_level = 139 AND s.id_nomenclature_sensitivity = 67) OR s.id_nomenclature_diffusion_level = 144 THEN st_transform(s.the_geom_point, 4326)
+		-- à la commune
+		WHEN s.id_nomenclature_diffusion_level = 140 THEN 
+			(SELECT centroid_4326 FROM areas a WHERE a.id_synthese = s.id_synthese AND type_code = 'COM' LIMIT 1)
+		-- au carreau 10 km
+		WHEN s.id_nomenclature_diffusion_level = 141 OR (s.id_nomenclature_sensitivity = 69 AND s.id_nomenclature_diffusion_level <> 142) THEN
+			(SELECT centroid_4326 FROM areas a WHERE a.id_synthese = s.id_synthese AND type_code = 'M10' LIMIT 1)
+		-- au departement
+		WHEN s.id_nomenclature_diffusion_level = 142 THEN
+			(SELECT centroid_4326 FROM areas a WHERE a.id_synthese = s.id_synthese AND type_code = 'DEP' LIMIT 1)
+		-- le reste
+		ELSE st_transform(s.the_geom_point, 4326)
 	    END AS the_geom_point,
+	    CASE
+		-- donnees precises
+		WHEN (s.id_nomenclature_diffusion_level = 139 AND s.id_nomenclature_sensitivity = 67) OR s.id_nomenclature_diffusion_level = 144 THEN 'MAX'
+		-- à la commune
+		WHEN s.id_nomenclature_diffusion_level = 140 THEN 'COM'
+		-- au carreau 10 km
+		WHEN s.id_nomenclature_diffusion_level = 141 OR (s.id_nomenclature_sensitivity = 69 AND s.id_nomenclature_diffusion_level <> 142) THEN 'KM10'
+		-- au departement
+		WHEN s.id_nomenclature_diffusion_level = 142 THEN 'DEP'
+		-- le reste
+		ELSE 'MAX'
+	    END AS info_geom_point,
+	    -- fin MODIF
 	    s.count_min AS effectif_total,
-	    dl.cd_nomenclature::int as diffusion_level
+	    dl.cd_nomenclature::int as diffusion_level,
+	    -- debut modif 2 ajouts PNRNM
+	    s."precision",
+	    s.id_nomenclature_valid_status as validation
+	    -- fin modif 2
 	   FROM synthese.synthese s
 	   LEFT OUTER JOIN synthese.t_nomenclatures dl ON s.id_nomenclature_diffusion_level = dl.id_nomenclature
 	   LEFT OUTER JOIN synthese.t_nomenclatures st ON s.id_nomenclature_observation_status = st.id_nomenclature
-	  WHERE (NOT dl.cd_nomenclature = '4'::text OR id_nomenclature_diffusion_level IS NULL)   -- Filtre données non diffusable code "4" ou pas de diffusion spécifiée
-		AND st.cd_nomenclature = 'Pr'-- seulement les données présentes (status_observation = )
+	   LEFT OUTER JOIN synthese.diff_observers do2 on do2.id_synthese = s.id_synthese
+		-- Filtre données non diffusable ("4") ou pas de diffusion spécifiée (NULL), 
+		-- ou données sensible aucune diff (71) ou donnée sensible diff départementale (70)
+		-- ET seulement les données présentes
+	  WHERE 
+		(NOT dl.cd_nomenclature = '4'::text OR id_nomenclature_diffusion_level IS NULL OR s.id_nomenclature_sensitivity = 71 OR s.id_nomenclature_sensitivity = 70)   
+		AND st.cd_nomenclature = 'Pr'
 )
  SELECT d.id_synthese,
+    d.id_dataset,
     d.cd_nom,
     d.dateobs,
     d.observateurs,
@@ -43,6 +147,10 @@ WITH areas AS (
     d.the_geom_point,
     d.effectif_total,
     c.insee,
-    diffusion_level
-FROM obs_data d
-JOIN atlas.l_communes c ON st_intersects(d.the_geom_point, c.the_geom);
+    d.diffusion_level,
+    d."precision",
+    d.validation,
+    d.info_geom_point
+   FROM obs_data d
+     JOIN atlas.l_communes c ON st_intersects(d.the_geom_point, c.the_geom)
+;

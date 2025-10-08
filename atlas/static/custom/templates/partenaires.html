@@ -1,0 +1,446 @@
+{% extends "templates/core/layout.html" %}
+
+{% block title %}
+Partenaires
+{% endblock %}
+
+{% block content %}
+<!-- AJOUTER MON CONTENU HTML ici -->
+<head>
+        <meta charset="utf-8" />
+        <title>Partenaires | {{configuration.NOM_APPLICATION}} </title>
+
+        <!-- Jquery -->
+        <script type=text/javascript src="{{url_for('static', filename='lib/jquery-1.12.4.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='lib/jquery-ui.min.js') }}"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/jquery-ui.css') }}" />
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"></link>
+        <script type=text/javascript src="{{url_for('static', filename='lib/bootstrap/js/bootstrap.min.js') }}"></script>
+
+	      <!-- custom font Parc -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Amaranth:wght@400;700&family=Dosis:wght@500;700&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
+
+	      <!-- CSS Atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/index.css') }}" />
+        <link rel="stylesheet" href="{{url_for('static', filename='css/atlas.css') }}" /> <!-- css général atlas -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/staticPages.css') }}" /> <!-- css général pages statiques -->
+        <link rel="stylesheet" href="{{url_for('static', filename='custom/custom.css') }}" /> <!-- css overidde - modif des polices et barre du dessus -->
+
+	      <!-- favicon / si ne fonctionne pas, mettre fichiers à la racine /atlas-->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='custom/images/favicon/favicon.ico') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='custom/images/favicon/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='custom/images/favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='custom/images/favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ url_for('static', filename='custom/images/favicon/site.webmanifest') }}">
+        <link rel="mask-icon" href="{{ url_for('static', filename='custom/images/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+	
+	      <!-- Matomo -->
+        <script type="text/javascript" src="{{ url_for('static', filename='matomo.js') }}"></script>
+   </head>
+
+   <body  data-spy="scroll" data-target="#sommaire">
+		<div class="container-fluid" id="page"> 
+
+            <!-- Carousel -->
+            <!-- ================================================== -->
+            <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: -15px; margin-bottom: 0px;">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                  <img src="{{url_for('static', filename='custom/images/00-partenaires.jpg') }}"/>
+
+                  <div class="container">
+                    <div class="carousel-caption">
+                      <h1>Partenaires de {{configuration.NOM_APPLICATION}}</h1>
+                      <p>Découvrez tous les partenaires du portail de visualisation des données naturalistes du {{configuration.STRUCTURE}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.carousel -->
+
+            <!-- Contenu page -->
+            <!-- ================================================== -->
+            <div class="container presentation" style="margin-bottom: 20px;">
+              <div class="col-lg-8">
+              </div>
+              <div style="clear: both;"></div>
+
+              <!-- <hr class="featurette-divider"> -->
+                
+              <!-- partenaires techniques -->
+                <!-- Titre -->		
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; margin-top:10px; padding: 10px; text-align:center;">
+                  <div class="row">
+                      <div class="col">
+                       <h3 class="title-spaced title-bar">Partenaires techniques
+                          <span data-toggle="tooltip"
+                            data-original-title="Structures partageant la base de données administrée par le {{configuration.STRUCTURE}} et soutenant {{configuration.NOM_APPLICATION}}"
+                            data-placement="right">
+                            <a class="fa fa-question-circle helpTip"></a>
+                          </span>
+                        </h3>                
+                      </div>
+                  </div>
+                </div>                
+                <!-- Logos -->	
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 20px; text-align:left;">
+                  <div class="row">
+                      <div class="col"> 
+                        <a href="https://www.affo-nature.org/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_affo.png') }}" 
+                        title="Association faune et flore de l'Orne"></a>
+			<p align="middle" vertical-align="middle" class="text-muted">
+			<a href="https://biodivorne.affo-nature.org/" target="_blank">Biodiv'Orne (AFFO)</a>
+			</p>
+                      </div>
+                      <div class="col">  
+                        <a href="https://www.orne.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_D61.jpg') }}" 
+                        title="Conseil départemental de l'Orne"></a>
+                      </div>
+                      <div class="col">                  
+                        <a href="https://www.parc-naturel-perche.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_pnrp.jpg') }}" 
+                        title="Parc naturel régional du Perche"></a>
+			<p align="middle" vertical-align="middle" class="text-muted">
+			<i><a href="https://biodiv-perche.fr/" target="_blank">Biodiv' Perche</a></i>
+			</p>
+                      </div>
+                  </div>
+
+                </div>
+
+              <!-- Producteurs de données -->
+                <!-- Titre -->		
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; margin-top:10px; padding: 10px; text-align:center;">
+                  <div class="row">
+                      <div class="col">
+                        <h3 class="title-spaced title-bar">Partenaires producteurs de données
+                          <span data-toggle="tooltip"
+                            data-original-title="Personnes physiques ou morales saisissant des données commandées par le {{configuration.STRUCTURE}} et/ou partagées avec lui"
+                            data-placement="right">
+                            <a class="fa fa-question-circle helpTip"></a>
+                          </span></h3>                 
+                      </div>
+                  </div>
+                </div>                
+                <!-- Logos -->	
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 20px; text-align:left;">
+                  <div class="row">
+                      <div class="col"> 
+                        <a href="/organism/3">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_affo.png') }}" 
+                        title="Association faune et flore de l'Orne"></a>
+                      </div>
+                      <div class="col">  
+                        <a href="/organism/6">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_cbnb.png') }}" 
+                        title="Conservatoire botanique national de Brest"></a>
+                      </div>
+                      <div class="col"> 
+                        <a href="/organism/1000020">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_cenpdl.png') }}" 
+                        title="Conservatoire d'espaces naturels Pays de la Loire"
+                        ></a>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col"> 
+                        <a href="/organism/1000017">                 
+                        <img class="logo-partenaire" 
+				                src="{{url_for('static', filename='custom/images/partenaires/logo_D61.jpg') }}" 
+				                title="Conseil départemental de l'Orne (bureau ENS)"></a>
+                      </div>
+                      <div class="col">  
+                        <a href="/organism/1000003">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_cpie61.jpg') }}" 
+                        title="CPIE Collines normandes"></a>
+                      </div>
+                      <div class="col">  
+                        <a href="/organism/1000018">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_cpie53.jpg') }}" 
+                        title="CPIE Mayenne - Bas-Maine"></a>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <!--<div class="col">  
+                        <a href="https://cpie72.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_cpie72.jpg') }}" 
+                        title="CPIE Vallées de la Sarthe et du Loir"></a>
+                      </div>-->
+                      <div class="col">  
+                        <a href="/organism/1000019">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_fedePech61.png') }}" 
+                        title="Fédération de l'Orne pour la Pêche et la Protection du Milieu Aquatique"></a>
+                      </div>
+                      <div class="col">  
+                        <a href="/organism/1000075">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_fedePech72.png') }}" 
+                        title="Fédération de la Sarthe pour la Pêche et la Protection du Milieu Aquatique"></a>
+                      </div>             
+                      <div class="col">  
+                        <a href="/organism/7">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_gretia.png') }}" 
+                        title="Groupe d'étude des invertébrés armoricains"></a>
+                      </div>	
+                  </div>
+                  <div class="row">
+                    <div class="col">  
+                      <a href="/organism/1000001">                 
+                      <img class="logo-partenaire" 
+                      src="{{url_for('static', filename='custom/images/partenaires/logo_gmn.png') }}" 
+                      title="Groupe mammalogique normand"></a>
+                    </div>
+                      <div class="col">                  
+                        <a href="/organism/1000000">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_gonm.png') }}" 
+                        title="Groupe ornithologique normand"></a>
+                      </div>
+                      <div class="col"> 
+                        <a href="/organism/1000045">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_lpo72.jpg') }}" 
+                        title="Ligue pour la protection des oiseaux, Sarthe"></a>
+                      </div>
+                    </div>
+
+                  <div class="row">		
+                    <div class="col"> 					  
+                      <a href="/organism/1000013">                 
+                      <img class="logo-partenaire" 
+                      src="{{url_for('static', filename='custom/images/partenaires/logo_mne.svg') }}" 
+                      title="Mayenne nature environnement"></a>
+                    </div>			  
+                      <div class="col">                  
+                        <a href="/organism/100">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_pnrp.jpg') }}" 
+                        title="Parc naturel régional du Perche"></a>
+                      </div>
+
+                    <div class="row">	
+                      <div class="col" style="padding-top: 20px;padding-left: 40px;padding-right: 40px;vertical-align:middle"> 
+                        <p align="left" vertical-align="middle" class="text-muted">
+                          <b>Autres contributeurs :</b>
+                          <br>
+                          <a href="/organism/1000035">BioObs</a>, 
+                          <a href="/organism/1000015">Bureaux d'études & consultants</a>, 
+                          <a href="/organism/1000043">Fauna Flora</a>, 
+                          <a href="/organism/1000004">Groupe Mycologique Fertois</a>, 
+                          <a href="/organism/4">Groupe Ornithologique des Avaloirs</a>, 
+                          <a href="/organism/1000014">Habitants-bénévoles</a>, 
+                          <a href="/organism/1000032">IGN</a>, 
+                          <a href="/organism/1000054">Lycée agricole publique de l'Orne</a>, 
+                          <a href="/organism/1000016">Stalleger Peter (Consultant Environnement)</a>, 
+                          <a href="/organism/1000033">Tela Botanica</a>, 
+                          <a href="/organism/1000021">UMS PatriNat (OFB-CNRS-MNHN)</a>, 
+                          ...
+                        </p>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- partenaires diffusion -->
+                <!-- Titre -->		
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; margin-top:10px; padding: 10px; text-align:center;">
+                  <div class="row">
+                      <div class="col">
+                        <h3 class="title-spaced title-bar">Partenaires diffusion des données
+                          <span data-toggle="tooltip"
+                            data-original-title="Réseau d'acteurs au sein duquel le {{configuration.STRUCTURE}} met en partage l'information naturaliste qu'il détient selon un ensemble de méthodes et de règles communes"
+                            data-placement="right">
+                            <a class="fa fa-question-circle helpTip"></a>
+                          </span>
+                        </h3>                  
+                      </div>
+                  </div>
+                </div>                
+                <!-- Logos -->	
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 20px; text-align:left;">
+                  <div class="row">
+                      <div class="col">                  
+                        <a href="https://www.anbdd.fr/biodiversite/connaissance/le-sinp-regional/odin/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_odin.jpg') }}" 
+                        title="Outil de diffusion de l'information naturaliste de Normandie"></a>
+                      </div>
+                      <div class="col">                  
+                        <a href="https://www.anbdd.fr/biodiversite/connaissance/le-sinp-regional/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_anbdd.png') }}" 
+                        title="Agence normande de la biodiversité et du développement durable"></a>
+                      </div>
+                    </div>  
+				
+                  <div class="row">
+                      <div class="col"> 
+                        <a href="https://biodiv-paysdelaloire.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_biodivpdl.jpg') }}" 
+                        title="Biodiv'Pays de la Loire"
+                        ></a>
+                      </div>
+                      <div class="col"> 
+                        <a href="https://ginco2-paysdelaloire.mnhn.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_gincopdl.png') }}" 
+                        title="GINCO Pays de la Loire"
+                        ></a>
+                      </div>
+                  </div>
+				  
+                  <div class="row">
+                      <div class="col">  
+                        <a href="http://www.cbnbrest.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_cbnb.png') }}" 
+                        title="Conservatoire botanique national de Brest"
+                        ></a>
+                      </div>
+                      <div class="col">                  
+                        <a href="https://sinp.naturefrance.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_sinp.png') }}" 
+                        title="Système d'information de l'inventaire du patrimoine naturel"></a>
+                      </div>
+                  </div>
+                  <!--<div class="row">
+                    <div class="col">                  
+                      <a href="https://sinp.naturefrance.fr/" target="_blank">                 
+                      <img class="logo-partenaire"
+                      src="{{url_for('static', filename='custom/images/partenaires/logo_biodivorne.png') }}" 
+                      title="Biodiv'Orne - atlas de la faune et de la flore de l'Orne"></a>
+                    </div>                   
+                  </div>-->
+                </div>
+
+              <!-- Financeur -->
+                <!-- Titre -->		
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; margin-top:10px; padding: 10px; text-align:center;">
+                  <div class="row">
+                      <div class="col">
+                        <h3 class="title-spaced title-bar">Partenaires financiers
+                          <span data-toggle="tooltip"
+                            data-original-title="Acteurs s'étant engagés dans le financement du {{configuration.STRUCTURE}} et de ses actions pour la collecte et la diffusion des données naturalistes"
+                            data-placement="right">
+                            <a class="fa fa-question-circle helpTip"></a>
+                          </span>
+                        </h3>                 
+                      </div>
+                  </div>
+                </div>                
+                <!-- Logos -->	
+                <div class="col-lg-12" style="background:#fff; border-radius: 0px; padding: 20px; text-align:left;">
+                  <div class="row">
+                      <div class="col"> 
+                        <a href="https://www.orne.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_D61.jpg') }}" 
+                        title="Conseil départemental de l'Orne"
+                        ></a>
+                      </div>
+                      <div class="col"> 
+                        <a href="https://www.manche.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_D50.jpg') }}" 
+                        title="Conseil départemental de la Manche"
+                        ></a>
+                      </div>					  
+                      <div class="col"> 
+                        <a href="https://www.lamayenne.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_D53.jpg') }}" 
+                        title="Conseil départemental de la Mayenne"
+                        ></a>
+                      </div>		  
+                      <div class="col"> 
+                        <a href="https://www.sarthe.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_D72.jpg') }}" 
+                        title="Conseil départemental de la Sarthe"
+                        ></a>
+                      </div>
+                      <div class="col">  
+                        <a href="https://www.normandie.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_r_nmdie.png') }}" 
+                        title="Conseil régional de Normandie"
+                        ></a>
+                      </div>					  
+                      <div class="col">  
+                        <a href="https://www.paysdelaloire.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_r_pdl.jpg') }}" 
+                        title="Conseil régional des Pays de la Loire"
+                        ></a>
+                      </div>	  
+                      <div class="col"> 
+                        <a href="http://www.normandie.developpement-durable.gouv.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_dreal_nmdie.png') }}" 
+                        title="DREAL Normandie"
+                        ></a>
+                      </div>
+                      <div class="col">  
+                        <a href="http://www.pays-de-la-loire.developpement-durable.gouv.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_dreal_pdl.jpg') }}" 
+                        title="DREAL Pays de la Loire"
+                        ></a>
+                      </div>
+                      <div class="col">  
+                        <a href="https://www.gouvernement.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_etat.jpg') }}" 
+                        title="État français"
+                        ></a>
+                      </div>			  
+                      <div class="col">  
+                        <a href="https://ofb.gouv.fr/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_ofb.png') }}" 
+                        title="Office français de la biodiversité"
+                        ></a>
+                      </div>
+                      <div class="col">                  
+                        <a href="https://europa.eu/" target="_blank">                 
+                        <img class="logo-partenaire" 
+                        src="{{url_for('static', filename='custom/images/partenaires/logo_europe.jpg') }}" 
+                        title="Union européenne"
+                        ></a>
+                      </div>
+
+             </div>
+           </div>
+          </div>		
+          <!-- FIN PAGE -->
+        
+<!--<script type="text/javascript"> var configuration = {{configuration|tojson}}; </script>-->
+
+<script type=text/javascript src="{{url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+<script type=text/javascript src="{{url_for('static', filename='node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='node_modules/jquery-lazy/jquery.lazy.min.js') }}"></script>
+<script type=text/javascript src="{{url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+
+<script src="{{url_for('static', filename='main.js') }}"></script>
+
+{% endblock %}

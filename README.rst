@@ -27,12 +27,12 @@ Rapport de stage (Théo Lechemia) : https://github.com/PnX-SI/GeoNature-atlas/bl
 
 Soutenance de stage (Théo Lechemia) : https://github.com/PnX-SI/GeoNature-atlas/blob/master/docs/2016-09-soutenance-Theo-Lechemia.pdf
 
-Atlas en ligne utilisant GeoNature-atlas :
+Exemples d'atlas en ligne utilisant GeoNature-atlas :
 
 - `PN du Mercantour <http://biodiversite.mercantour-parcnational.fr>`_
 - `PN de la Vanoise <http://biodiversite.vanoise-parcnational.fr>`_
 - `PN des Ecrins <http://biodiversite.ecrins-parcnational.fr>`_ 
-- `PNR Normandie Maine <http://observatoire.parc-naturel-normandie-maine.fr/atlas>`_
+- `PNR Normandie Maine <https://biodiversite.parc-naturel-normandie-maine.fr>`_
 - `CEN des Pays de la Loire <http://www.biodiv-paysdelaloire.fr>`_
 - `Atlas du Languedoc-Roussillon <https://atlas.libellules-et-papillons-lr.org>`_
 - `LPO Auvergne-Rhône-Alpes <https://carto.fauneauvergnerhonealpes.org>`_
@@ -40,6 +40,14 @@ Atlas en ligne utilisant GeoNature-atlas :
 - `Société Herpétologique de France <https://atlas.lashf.org>`_
 - `Picardie Nature <https://clicnat.fr>`_
 - `Métropole clermontoise <https://atlas.cbiodiv.org>`_
+- `PNR Forêt d'Orient <https://biodiversite.pnr-foret-orient.fr>`_
+- `Archipel des Mascareignes <https://obs.maeoproject.org>`_
+- `Biodiv13 <https://hop-levivant.fr>`_
+- `Biodiv06 <https://www.biodiv06-lpo.org>`_
+- `Biodiv'PACA <https://www.biodivpaca-lpo.org>`_
+- `Atlas de la faune et de la flore de La Réunion <http://atlas.borbonica.re>`_
+- `Silene Nature <https://nature.silene.eu>`_
+- `Biodiv'Rennes <https://abc-biodivrennes.fr/atlas>`_
 
 Technologies
 ------------
@@ -72,7 +80,7 @@ Licence
 -------
 
 * OpenSource - GPL V3
-* Copyright (c) 2016-2019 - Parc National des Écrins
+* Copyright (c) 2016-2022 - Parc National des Écrins
 
 .. image:: http://geonature.fr/img/logo-pne.jpg
     :target: http://www.ecrins-parcnational.fr

@@ -2,10 +2,9 @@
 
 
 from flask import current_app
-from .. import utils
-
-
 from sqlalchemy.sql import text
+
+from atlas.modeles import utils
 
 
 def _format_media(r):
@@ -69,44 +68,61 @@ def getPhotoCarousel(connection, cd_ref, id):
 
 
 def switchMedia(row):
+    media_template = {  # noqa
+        current_app.config["ATTR_AUDIO"]: "{path}",
+        current_app.config["ATTR_VIDEO_HEBERGEE"]: "{path}",
+        current_app.config[
+            "ATTR_YOUTUBE"
+        ]: """
+            <iframe
+                width='100%'
+                height='315'
+                src='https://www.youtube.com/embed/{path}'
+                frameborder='0'
+                allowfullscreen>
+            </iframe>""",
+        current_app.config[
+            "ATTR_DAILYMOTION"
+        ]: """
+            <iframe
+                frameborder='0'
+                width='100%'
+                height='315'
+                src='//www.dailymotion.com/embed/video/{path}'
+                allowfullscreen>
+            </iframe>""",
+        current_app.config[
+            "ATTR_VIMEO"
+        ]: """
+            <iframe
+                src='https://player.vimeo.com/video/{path}?color=ffffff&title=0&byline=0&portrait=0'
+                width='640'
+                height='360'
+                frameborder='0'
+                webkitallowfullscreen
+                mozallowfullscreen
+                allowfullscreen>
+            </iframe>""",
+    }
+
     goodPath = str()
-    if row.chemin is None and row.url is None:
+    if not row.chemin and not row.url:
         return None
-    elif row.chemin is not None and row.chemin != "":
+    elif row.chemin:
         goodPath = row.chemin
     else:
         goodPath = row.url
 
-    if goodPath == "" or goodPath is None:
+    if not goodPath:
         return None
-
-    return {
-        current_app.config["ATTR_AUDIO"]: goodPath,
-        current_app.config["ATTR_VIDEO_HEBERGEE"]: goodPath,
-        current_app.config[
-            "ATTR_YOUTUBE"
-        ]: "<iframe width='100%' height='315' src='https://www.youtube.com/embed/"  # noqa
-        + row.url
-        + "' frameborder='0' allowfullscreen></iframe>",
-        current_app.config[
-            "ATTR_DAILYMOTION"
-        ]: "<iframe frameborder='0' width='100%' height='315' src='//www.dailymotion.com/embed/video/"  # noqa
-        + row.url
-        + "' allowfullscreen></iframe>",
-        current_app.config[
-            "ATTR_VIMEO"
-        ]: "<iframe src='https://player.vimeo.com/video/"  # noqa
-        + row.url
-        + "?color=ffffff&title=0&byline=0&portrait=0' width='640' height='360'\
-        frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>",  # noqa
-    }
+    return media_template[row.id_type].format(path=goodPath)
 
 
 def getVideo_and_audio(connection, cd_ref, id5, id6, id7, id8, id9):
     sql = """
         SELECT *
         FROM atlas.vm_medias
-        WHERE id_type in (:id5, :id6, :id7, :id8, :id9) AND cd_ref = :thiscdref
+        WHERE id_type IN (:id5, :id6, :id7, :id8, :id9) AND cd_ref = :thiscdref
         ORDER BY date_media DESC
     """
     req = connection.execute(
@@ -114,11 +130,11 @@ def getVideo_and_audio(connection, cd_ref, id5, id6, id7, id8, id9):
     )
     tabMedias = {"audio": list(), "video": list()}
     for r in req:
-        if switchMedia(r) is not None:
-            path = switchMedia(r)
+        path = switchMedia(r)
+        if path is not None:
             temp = {
                 "id_type": r.id_type,
-                "path": path[r.id_type],
+                "path": path,
                 "title": r.titre,
                 "author": deleteNone(r.auteur),
                 "description": deleteNone(r.desc_media),
@@ -137,7 +153,7 @@ def getLinks_and_articles(connection, cd_ref, id3, id4):
     sql = """
         SELECT *
         FROM atlas.vm_medias
-        WHERE id_type in (:id3, :id4) AND cd_ref = :thiscdref
+        WHERE id_type IN (:id3, :id4) AND cd_ref = :thiscdref
         ORDER BY date_media DESC
     """
     req = connection.execute(text(sql), thiscdref=cd_ref, id3=id3, id4=id4)
@@ -155,11 +171,11 @@ def getPhotosGallery(connection, id1, id2):
     req = connection.execute(text(sql), thisID1=id1, thisID2=id2)
     tab_photos = []
     for r in req:
-        if r.nom_vern is not None:
+        if r.nom_vern:
             nom_verna = r.nom_vern.split(",")
-            taxonName = nom_verna[0] + " | " + r.lb_nom
+            taxonName = nom_verna[0] + " | <i>" + r.lb_nom + "</i>"
         else:
-            taxonName = r.lb_nom
+            taxonName = "<i>" + r.lb_nom + "</i>"
 
         photo = _format_media(r)
         photo["name"] = taxonName
@@ -179,13 +195,13 @@ def getPhotosGalleryByGroup(connection, id1, id2, INPNgroup):
     tab_photos = []
     for r in req:
         photo = _format_media(r)
-        if r.nom_vern is not None:
+        if r.nom_vern:
             nom_verna = r.nom_vern.split(",")
-            taxon_name = nom_verna[0] + " | " + r.lb_nom
+            taxonName = nom_verna[0] + " | <i>" + r.lb_nom + "</i>"
         else:
-            taxon_name = r.lb_nom
-        photo["name"] = taxon_name
+            taxonName = "<i>" + r.lb_nom + "</i>"
+
+        photo["name"] = taxonName
         photo["nb_obs"] = r.nb_obs
         tab_photos.append(photo)
     return tab_photos
-
