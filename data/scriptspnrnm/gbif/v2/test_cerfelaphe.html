@@ -1,0 +1,29 @@
+<!-- modifier link rel et script scr 
+     integrer au code le fait que taxonKey et le nom de l'espèce, avec le lien GBIF change en fonction de la page -->
+
+<!-- index.html -->
+
+<!-- partie du code à mettre dans la page -->
+<div id="map-gbif" style="width: 510px; height: 300px;"></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script type="text/javascript">
+  //import leaflet
+  var map = L.map('map-gbif').setView([30, 0], 1);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map)
+  L.tileLayer('https://api.gbif.org/v2/map/occurrence/density/{z}/{x}/{y}@1x.png?style=classic.poly&bin=hex&hexPerTile=70&taxonKey=2497266', {
+    attribution: ', <a href="https://www.gbif.org/fr/terms">GBIF</a> - <a href="https://www.gbif.org/fr/species/2440958">Cervus elaphus Linnaeus, 1758</a>'
+  }).addTo(map);
+</script>
+
+<!-- source à mettre à la fin -->
+<!-- sinon vérifier installation de la librairie leaflet et l'importer dans le script-->
+<!-- pour intégrer variable, voir code en python et {{}} -->
+<!-- le code javascript a mettre dans un fichier .js (à la fin du html, cf line 730 /templates/ficheEspece.html -->
+<!-- voir code qui s'execute line 717 à 727 /templates/ficheEspece.html
+<!-- voir aussi : https://github.com/pnrnm-sig/BiodivNM/blob/main/atlas/atlasRoutes.py -->
+
